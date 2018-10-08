@@ -5,6 +5,8 @@
  */
 package Interface;
 
+import Classes.UserAuthentication;
+
 /**
  *
  * @author Heli
@@ -16,7 +18,19 @@ public class MainClass {
      */
     public static void main(String[] args) {
         HomeGUI home = new HomeGUI();
-        home.setVisible(true);
+        LoginGUI login = new LoginGUI();
+        UserAuthentication userAuth = new UserAuthentication();
+        
+        if (userAuth.isLoggedIn()) {
+            
+            home.setVisible(true);
+        } else{
+            
+            login.setVisible(true);
+        }
+        
+        
+        
     }
     
 }
