@@ -26,4 +26,8 @@ public class UserAuthentication {
         
         return false;
     }
+    
+    public void logOut(){
+        LoggedInUser = "";
+    }
 }

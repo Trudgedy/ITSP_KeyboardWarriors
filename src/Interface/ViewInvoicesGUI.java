@@ -93,11 +93,13 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        // TODO add your handling code here:
+        //Dispose Current Interface
         this.dispose();
+        //Create new HomeGUI
         new HomeGUI().setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
