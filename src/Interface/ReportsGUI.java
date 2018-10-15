@@ -155,6 +155,15 @@ public class ReportsGUI extends javax.swing.JFrame {
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         // TODO add your handling code here:
+        String reportType = reportTypeComboBox.getSelectedItem().toString();
+        String period = periodComboBox.getSelectedItem().toString();
+        
+        switch(period) {
+            case "Last Month":
+                break;
+            case "Last Year":
+                break;
+        }        
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
