@@ -5,6 +5,8 @@
  */
 package Interface;
 
+import Classes.Report;
+
 /**
  *
  * @author Alastair
@@ -31,9 +33,9 @@ public class ReportsGUI extends javax.swing.JFrame {
 
         btnHome = new javax.swing.JButton();
         reportTypeLabel = new javax.swing.JLabel();
-        reportTypeComboBox = new javax.swing.JComboBox<String>();
+        reportTypeComboBox = new javax.swing.JComboBox<>();
         periodLabel = new javax.swing.JLabel();
-        periodComboBox = new javax.swing.JComboBox<String>();
+        periodComboBox = new javax.swing.JComboBox<>();
         generateReportButton = new javax.swing.JButton();
         printButton = new javax.swing.JButton();
         saveAsPdfButton = new javax.swing.JButton();
@@ -53,20 +55,35 @@ public class ReportsGUI extends javax.swing.JFrame {
         reportTypeLabel.setText("Report Type:");
 
         reportTypeComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        reportTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Turnover", "Profit" }));
+        reportTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turnover", "Profit" }));
 
         periodLabel.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         periodLabel.setText("Period:");
 
         periodComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        periodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Last Month", "Last Year" }));
+        periodComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Last Month", "Last Year" }));
 
         generateReportButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         generateReportButton.setText("Generate Report");
+        generateReportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateReportButtonActionPerformed(evt);
+            }
+        });
 
         printButton.setText("Print");
+        printButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
 
         saveAsPdfButton.setText("Save as PDF");
+        saveAsPdfButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsPdfButtonActionPerformed(evt);
+            }
+        });
 
         reportTextPane.setEditable(false);
         reportTextPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -137,6 +154,18 @@ public class ReportsGUI extends javax.swing.JFrame {
         //Create new HomeGUI
         new HomeGUI().setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_generateReportButtonActionPerformed
+
+    private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveAsPdfButtonActionPerformed
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_printButtonActionPerformed
 
     /**
      * @param args the command line arguments
