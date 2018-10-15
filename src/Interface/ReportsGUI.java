@@ -5,12 +5,18 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
+import java.util.ArrayList;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form Reports
      */
@@ -154,10 +160,33 @@ public class ReportsGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
-        // TODO add your handling code here:
         String reportType = reportTypeComboBox.getSelectedItem().toString();
         String period = periodComboBox.getSelectedItem().toString();
+        ArrayList<Order> orderList;
         
+        Database generate = new Database();
+        
+        switch(period) {
+            case "Last Year":
+                orderList = generate.getOrders(1);
+                break;
+            case "Last Month":
+                orderList = generate.getOrders(2);
+                break;
+            default:
+                final JPanel panel = new JPanel();
+                JOptionPane.showMessageDialog(panel, "No entries found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+        }
+        
+        for (int i = 0; i < orderList.size(); i++) {
+            String currentText = reportTextPane.getText();
+            String currentDate = orderList.get(i).getDate();
+            String currentDescription = orderList.get(i).getDescription();
+            int currentAmount = orderList.get(i).getAmount();
+            
+            reportTextPane.setText(currentText + currentDate + currentDescription + currentAmount);
+        }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
