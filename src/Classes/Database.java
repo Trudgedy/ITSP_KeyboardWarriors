@@ -52,7 +52,7 @@ public class Database {
         String range;
 
         if (x == 1) {
-            range = "7 DAY";
+            range = "1 YEAR";
         } else {
             range = "1 MONTH";
         }
@@ -62,15 +62,20 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT date,description,amount FROM `orders` WHERE date >= DATE(NOW()) - INTERVAL " + range + "");
             rs = pst.executeQuery();
 
-            while (rs.next()) {
-                Order order = new Order();
-                order.setDate(rs.getString(1));
-                order.setDescription(rs.getString(2));
-                order.setAmount(rs.getInt(3));
-                Arr.add(order);
-            }
+            if (rs.next()) {
 
-            return Arr;
+                while (rs.next()) {
+                    Order order = new Order();
+                    order.setDate(rs.getString(1));
+                    order.setDescription(rs.getString(2));
+                    order.setAmount(rs.getInt(3));
+                    Arr.add(order);
+                }
+
+                return Arr;
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;
