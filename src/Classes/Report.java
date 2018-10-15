@@ -10,9 +10,9 @@ package Classes;
  * @author Alastair
  */
 public class Report {
-    public String date;
-    public String description;
-    public String amount;
+    private String date;
+    private String description;
+    private String amount;
 
     public String getDate() {
         return date;
