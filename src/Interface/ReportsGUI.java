@@ -5,8 +5,6 @@
  */
 package Interface;
 
-import Classes.Report;
-
 /**
  *
  * @author Alastair
