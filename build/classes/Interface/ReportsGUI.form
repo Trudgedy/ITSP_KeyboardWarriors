@@ -151,16 +151,25 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Generate Report"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateReportButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="printButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Print"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="saveAsPdfButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save as PDF"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveAsPdfButtonActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="reportScrollPane">
       <AuxValues>
