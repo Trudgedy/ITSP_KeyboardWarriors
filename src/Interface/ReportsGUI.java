@@ -185,7 +185,7 @@ public class ReportsGUI extends javax.swing.JFrame {
             String currentDescription = orderList.get(i).getDescription();
             int currentAmount = orderList.get(i).getAmount();
             
-            reportTextPane.setText(currentText + currentDate + currentDescription + currentAmount);
+            reportTextPane.setText(currentText + "\n" + currentDate + "\t" + currentDescription + "\t" + currentAmount);
         }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
