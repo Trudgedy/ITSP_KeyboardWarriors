@@ -186,6 +186,7 @@ public class ReportsGUI extends javax.swing.JFrame {
                 return;
         }
         
+        //create a new model for the table and set headings
         DefaultTableModel model = new DefaultTableModel(0, 0);
         String header[] = new String[] { "Date", "Description", "Amount"};
         model.setColumnIdentifiers(header);
