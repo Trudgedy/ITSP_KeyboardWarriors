@@ -174,7 +174,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
 
-            
+             
 
                 while (rs.next()) {
                     Item item = new Item();
@@ -187,7 +187,7 @@ public class Database {
                 }
 
                 return Arr;
-                
+                 
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;

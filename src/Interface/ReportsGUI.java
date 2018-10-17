@@ -301,7 +301,6 @@ public class ReportsGUI extends javax.swing.JFrame {
 
             //add data to row
             data.add(orderList.get(i).getDate());
-            data.add(orderList.get(i).getDescription());
             data.add(orderList.get(i).getAmount());
 
             //add row to table
