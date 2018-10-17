@@ -166,7 +166,7 @@ public class Database {
         } */
     }
 
-    public static ArrayList<Item> getItem() {
+    public static ArrayList<Item> getItems() {
 
         ArrayList<Item> Arr = new ArrayList<>();
         try {
@@ -174,7 +174,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            
 
                 while (rs.next()) {
                     Item item = new Item();
@@ -187,9 +187,7 @@ public class Database {
                 }
 
                 return Arr;
-            } else {
-                return null;
-            }
+                
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;

@@ -5,6 +5,11 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Item;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Trudgedy
@@ -16,6 +21,7 @@ public class OrderGUI extends javax.swing.JFrame {
      */
     public OrderGUI() {
         initComponents();
+        updateTable();
     }
 
     /**
@@ -277,6 +283,8 @@ public class OrderGUI extends javax.swing.JFrame {
         this.dispose();
         //Create new HomeGUI
         new HomeGUI().setVisible(true);
+        
+        
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -337,4 +345,24 @@ public class OrderGUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtfieldQuantity;
     private javax.swing.JTextField txtfieldSupplier;
     // End of variables declaration//GEN-END:variables
+
+    private void updateTable() {
+        Database db = new Database();
+        
+        ArrayList<Item> itemArr = new ArrayList<>();
+        itemArr = db.getItems();
+        
+        for (int i = 0; i < itemArr.size(); i++) {
+            
+             DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+             
+             boolean available = true;
+             if (itemArr.get(i).getQuantity() == 0) {
+                available = false;
+            }
+             
+            String[] row = {itemArr.get(i).getItemName(), itemArr.get(i).getPrice() + "", itemArr.get(i).getSupplierName(), available + ""};
+            model.addRow(row);
+        }
+    }
 }
