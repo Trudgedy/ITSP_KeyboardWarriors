@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -60,16 +61,17 @@ public class Database {
 
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT date,description,amount FROM `orders` WHERE date >= DATE(NOW()) - INTERVAL " + range + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid WHERE date >= DATE(NOW()) - INTERVAL " + range + "");
             rs = pst.executeQuery();
 
             if (rs.next()) {
 
                 while (rs.next()) {
                     Order order = new Order();
-                    order.setDate(rs.getString(1));
-                    order.setDescription(rs.getString(2));
+                    order.setOrderid(rs.getInt(1));
+                    order.setBusinessname(rs.getString(2));
                     order.setAmount(rs.getInt(3));
+                    order.setDate(rs.getString(4));
                     Arr.add(order);
                 }
 
@@ -82,33 +84,25 @@ public class Database {
             return null;
         }
 
-        /* 
-        For anyone confused as to how to use this, here ArrayList<Order> Arr = Database.getOrders();
-        
-        for (int i = 0; i < Arr.size(); i++) {
-
-            System.out.println("The date is :" + Arr.get(i).getDate());
-            System.out.println("The amount is :" + Arr.get(i).getAmount());
-            System.out.println("The description is :" + Arr.get(i).getDescription());
-        } */
     }
 
+    //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
     public static ArrayList<Order> getInvoice() {
-
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT date,description,amount,suppliers.name FROM `orders` INNER JOIN suppliers ON orders.supplierid = suppliers.supplierid WHERE paid = 1");
+            PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid WHERE paid = 1");
             rs = pst.executeQuery();
 
             if (rs.next()) {
 
                 while (rs.next()) {
                     Order order = new Order();
-                    order.setDate(rs.getString(1));
-                    order.setDescription(rs.getString(2));
+                    order.setOrderid(rs.getInt(1));
+                    order.setBusinessname(rs.getString(2));
                     order.setAmount(rs.getInt(3));
+                    order.setDate(rs.getString(4));
                     Arr.add(order);
                 }
 
@@ -159,6 +153,28 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;
+        }
+
+    }
+
+    // Inserts new order.
+    public static boolean insertOrder(int itemid, int price) {
+        try {
+
+            Calendar calendar = Calendar.getInstance();
+            java.sql.Date date = new java.sql.Date(calendar.getTime().getTime());
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date) VALUES (?, ?, ?)");
+            pst.setInt(1, itemid);
+            pst.setInt(2, price);
+            pst.setDate(3, date, calendar);
+            pst.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
         }
 
     }

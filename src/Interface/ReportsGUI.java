@@ -18,13 +18,13 @@ import javax.swing.table.DefaultTableModel;
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form Reports
      */
     public ReportsGUI() {
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
     }
 
@@ -169,11 +169,11 @@ public class ReportsGUI extends javax.swing.JFrame {
         String reportType = reportTypeComboBox.getSelectedItem().toString();
         String period = periodComboBox.getSelectedItem().toString();
         ArrayList<Order> orderList;
-        
+
         Database generate = new Database();
-        
+
         //Determine the period over which the report should span
-        switch(period) {
+        switch (period) {
             case "Last Year":
                 orderList = generate.getOrders(1);
                 break;
@@ -185,22 +185,22 @@ public class ReportsGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(panel, "No entries found.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
         }
-        
+
         //create a new model for the table and set headings
         DefaultTableModel model = new DefaultTableModel(0, 0);
-        String header[] = new String[] { "Date", "Description", "Amount"};
+        String header[] = new String[]{"Date", "Description", "Amount"};
         model.setColumnIdentifiers(header);
         reportTable.setModel(model);
-        
+
         //iterate through the list of orders
         for (int i = 0; i < orderList.size(); i++) {
             Vector<Object> data = new Vector();
-            
+
             //add data to row
             data.add(orderList.get(i).getDate());
             data.add(orderList.get(i).getDescription());
             data.add(orderList.get(i).getAmount());
-            
+
             //add row to table
             model.addRow(data);
         }
