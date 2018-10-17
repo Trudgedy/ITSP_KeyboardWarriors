@@ -18,53 +18,53 @@ import java.util.ArrayList;
  * @author hamme
  */
 public class Database {
-    
+
     static Connection conn;
     static Statement statement;
     static ResultSet rs;
-    
+
     public static String[] getPassword(String username) {
-        
+
         String[] password = new String[2];
-        
+
         try {
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT password,salt FROM `user` WHERE username=?");
             pst.setString(1, username);
             rs = pst.executeQuery();
-            
+
             if (rs.next()) {
                 password[0] = rs.getString("password");
                 password[1] = rs.getString("salt");
                 return password;
             }
-            
+
         } catch (SQLException e) {
             System.out.print("Could not connect retrieve username. - Error:" + e);
-            
+
         }
         return password;
     }
 
     // For reports. Will be implemented later.
     public static ArrayList<Order> getOrders(int x) {
-        
+
         ArrayList<Order> Arr = new ArrayList<>();
         String range;
-        
+
         if (x == 1) {
             range = "1 YEAR";
         } else {
             range = "1 MONTH";
         }
-        
+
         try {
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT date,description,amount FROM `orders` WHERE date >= DATE(NOW()) - INTERVAL " + range + "");
             rs = pst.executeQuery();
-            
+
             if (rs.next()) {
-                
+
                 while (rs.next()) {
                     Order order = new Order();
                     order.setDate(rs.getString(1));
@@ -72,7 +72,7 @@ public class Database {
                     order.setAmount(rs.getInt(3));
                     Arr.add(order);
                 }
-                
+
                 return Arr;
             } else {
                 return null;
@@ -95,15 +95,15 @@ public class Database {
 
     // For invoices. Will implement later.
     public static ArrayList<Order> getInvoice() {
-        
+
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT date,description,amount,suppliers.name FROM `orders` INNER JOIN suppliers ON orders.supplierid = suppliers.supplierid WHERE paid = 1");
             rs = pst.executeQuery();
-            
+
             if (rs.next()) {
-                
+
                 while (rs.next()) {
                     Order order = new Order();
                     order.setDate(rs.getString(1));
@@ -111,7 +111,7 @@ public class Database {
                     order.setAmount(rs.getInt(3));
                     Arr.add(order);
                 }
-                
+
                 return Arr;
             } else {
                 return null;
@@ -131,17 +131,17 @@ public class Database {
             System.out.println("The description is :" + Arr.get(i).getDescription());
         } */
     }
-    
+
     public static ArrayList<Item> getItem() {
-        
+
         ArrayList<Item> Arr = new ArrayList<>();
         try {
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
-            
+
             if (rs.next()) {
-                
+
                 while (rs.next()) {
                     Item item = new Item();
                     item.setItemid(rs.getInt(1));
@@ -151,7 +151,7 @@ public class Database {
                     item.setSupplierName(rs.getString(5));
                     Arr.add(item);
                 }
-                
+
                 return Arr;
             } else {
                 return null;
@@ -160,18 +160,18 @@ public class Database {
             System.out.println("Caught exception: " + e);
             return null;
         }
-        
+
     }
-    
+
     static void connect_db() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/itspdb", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/itspdb", "root", "");
             statement = conn.createStatement();
             System.out.println("Database connection successful.");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.print("Could not connect connect to the database. - Error:" + e);
         }
     }
-    
+
 }

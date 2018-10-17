@@ -5,12 +5,20 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form Reports
      */
@@ -31,14 +39,14 @@ public class ReportsGUI extends javax.swing.JFrame {
 
         btnHome = new javax.swing.JButton();
         reportTypeLabel = new javax.swing.JLabel();
-        reportTypeComboBox = new javax.swing.JComboBox<String>();
+        reportTypeComboBox = new javax.swing.JComboBox<>();
         periodLabel = new javax.swing.JLabel();
-        periodComboBox = new javax.swing.JComboBox<String>();
+        periodComboBox = new javax.swing.JComboBox<>();
         generateReportButton = new javax.swing.JButton();
         printButton = new javax.swing.JButton();
         saveAsPdfButton = new javax.swing.JButton();
-        reportScrollPane = new javax.swing.JScrollPane();
-        reportTextPane = new javax.swing.JTextPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        reportTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,33 +61,53 @@ public class ReportsGUI extends javax.swing.JFrame {
         reportTypeLabel.setText("Report Type:");
 
         reportTypeComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        reportTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Turnover", "Profit" }));
+        reportTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Turnover", "Profit" }));
 
         periodLabel.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         periodLabel.setText("Period:");
 
         periodComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        periodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Last Month", "Last Year" }));
+        periodComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Last Month", "Last Year" }));
 
         generateReportButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         generateReportButton.setText("Generate Report");
+        generateReportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateReportButtonActionPerformed(evt);
+            }
+        });
 
         printButton.setText("Print");
+        printButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
 
         saveAsPdfButton.setText("Save as PDF");
+        saveAsPdfButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsPdfButtonActionPerformed(evt);
+            }
+        });
 
-        reportTextPane.setEditable(false);
-        reportTextPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        reportTextPane.setEnabled(false);
-        reportScrollPane.setViewportView(reportTextPane);
+        reportTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(reportTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
@@ -95,15 +123,14 @@ public class ReportsGUI extends javax.swing.JFrame {
                                 .addComponent(periodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addComponent(generateReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(reportScrollPane)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(saveAsPdfButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(printButton)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(saveAsPdfButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(printButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,13 +145,13 @@ public class ReportsGUI extends javax.swing.JFrame {
                     .addComponent(periodLabel)
                     .addComponent(periodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(generateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(reportScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(printButton)
                     .addComponent(saveAsPdfButton))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -137,6 +164,55 @@ public class ReportsGUI extends javax.swing.JFrame {
         //Create new HomeGUI
         new HomeGUI().setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
+        String reportType = reportTypeComboBox.getSelectedItem().toString();
+        String period = periodComboBox.getSelectedItem().toString();
+        ArrayList<Order> orderList;
+        
+        Database generate = new Database();
+        
+        //Determine the period over which the report should span
+        switch(period) {
+            case "Last Year":
+                orderList = generate.getOrders(1);
+                break;
+            case "Last Month":
+                orderList = generate.getOrders(2);
+                break;
+            default:
+                final JPanel panel = new JPanel();
+                JOptionPane.showMessageDialog(panel, "No entries found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+        }
+        
+        //create a new model for the table and set headings
+        DefaultTableModel model = new DefaultTableModel(0, 0);
+        String header[] = new String[] { "Date", "Description", "Amount"};
+        model.setColumnIdentifiers(header);
+        reportTable.setModel(model);
+        
+        //iterate through the list of orders
+        for (int i = 0; i < orderList.size(); i++) {
+            Vector<Object> data = new Vector();
+            
+            //add data to row
+            data.add(orderList.get(i).getDate());
+            data.add(orderList.get(i).getDescription());
+            data.add(orderList.get(i).getAmount());
+            
+            //add row to table
+            model.addRow(data);
+        }
+    }//GEN-LAST:event_generateReportButtonActionPerformed
+
+    private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveAsPdfButtonActionPerformed
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_printButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,11 +253,11 @@ public class ReportsGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHome;
     private javax.swing.JButton generateReportButton;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> periodComboBox;
     private javax.swing.JLabel periodLabel;
     private javax.swing.JButton printButton;
-    private javax.swing.JScrollPane reportScrollPane;
-    private javax.swing.JTextPane reportTextPane;
+    private javax.swing.JTable reportTable;
     private javax.swing.JComboBox<String> reportTypeComboBox;
     private javax.swing.JLabel reportTypeLabel;
     private javax.swing.JButton saveAsPdfButton;
