@@ -32,28 +32,89 @@ USE itspdb;
 -- Table structure for table `orders`
 --
 
+CREATE TABLE `items` (
+  `item` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `supplierid` int(11) NOT NULL,
+  `itemid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `items`
+--
+
+INSERT INTO `items` (`item`, `price`, `quantity`, `supplierid`, `itemid`) VALUES
+('Shank', 3, 50, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `date` date NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `amount` int(11) NOT NULL
+  `amount` int(11) NOT NULL,
+  `paid` tinyint(1) NOT NULL DEFAULT '0',
+  `itemid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `date`, `description`, `amount`) VALUES
-(1, '2018-10-01', 'This is the first value', 3000),
-(2, '2018-10-02', 'This is the second value', 35100),
-(5, '2018-09-16', 'This is another test', 53000),
-(6, '2018-09-20', 'This is the fifth test', 6900),
-(7, '2018-10-08', 'Testest', 8600),
-(8, '2018-10-07', 'Testestest', 36000),
-(9, '2018-10-15', 'Testestsetse', 560),
-(10, '2018-10-14', 'testestest', 960),
-(11, '2018-09-13', 'asdasdasdasdasd', 9600),
-(12, '2018-09-15', 'asdasdadasdasdasd', 3500);
+INSERT INTO `orders` (`order_id`, `date`, `amount`, `paid`, `itemid`) VALUES
+(1, '2018-10-01', 3000, 0, 0),
+(2, '2018-10-02', 35100, 0, 0),
+(5, '2018-09-16', 53000, 0, 0),
+(6, '2018-09-20', 6900, 0, 0),
+(7, '2018-10-08', 8600, 0, 0),
+(8, '2018-10-07', 36000, 0, 0),
+(9, '2018-10-15', 560, 0, 0),
+(10, '2018-10-14', 960, 0, 0),
+(11, '2018-09-13', 9600, 0, 0),
+(12, '2018-09-15', 3500, 0, 0),
+(13, '2018-10-17', 6000, 0, 1),
+(14, '2018-10-17', 9630, 0, 1),
+(15, '0000-00-00', 3685, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales`
+--
+
+CREATE TABLE `sales` (
+  `saleid` int(11) NOT NULL,
+  `dateofsale` date NOT NULL,
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `itemid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `suppliers`
+--
+
+CREATE TABLE `suppliers` (
+  `supplierid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `number` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `vatstatus` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`supplierid`, `name`, `email`, `number`, `address`, `vatstatus`) VALUES
+(1, 'TestBusiness', 'notarealbusiness@gmail.com', '123456789', 'Not a real stress 18', 0);
 
 -- --------------------------------------------------------
 
@@ -80,10 +141,31 @@ INSERT INTO `user` (`userid`, `username`, `password`, `salt`) VALUES
 --
 
 --
+-- Indexes for table `items`
+--
+ALTER TABLE `items`
+  ADD PRIMARY KEY (`itemid`),
+  ADD KEY `supplierid` (`supplierid`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`);
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `itemid` (`itemid`);
+
+--
+-- Indexes for table `sales`
+--
+ALTER TABLE `sales`
+  ADD PRIMARY KEY (`saleid`),
+  ADD KEY `itemid` (`itemid`);
+
+--
+-- Indexes for table `suppliers`
+--
+ALTER TABLE `suppliers`
+  ADD PRIMARY KEY (`supplierid`);
 
 --
 -- Indexes for table `user`
@@ -96,10 +178,28 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `items`
+--
+ALTER TABLE `items`
+  MODIFY `itemid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `sales`
+--
+ALTER TABLE `sales`
+  MODIFY `saleid` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `suppliers`
+--
+ALTER TABLE `suppliers`
+  MODIFY `supplierid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
