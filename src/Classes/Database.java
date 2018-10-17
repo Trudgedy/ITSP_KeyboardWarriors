@@ -64,7 +64,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid WHERE date >= DATE(NOW()) - INTERVAL " + range + "");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            if (rs.first()) {
 
                 while (rs.next()) {
                     Order order = new Order();
@@ -95,7 +95,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid WHERE paid = 1");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            if (rs.first()) {
 
                 while (rs.next()) {
                     Order order = new Order();
@@ -133,7 +133,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date, items.item, orders.quantity FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid INNER JOIN items ON orders.itemid = items.itemid WHERE paid = 0");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            if (rs.first()) {
 
                 while (rs.next()) {
                     Order order = new Order();
@@ -174,7 +174,7 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            if (rs.first()) {
 
                 while (rs.next()) {
                     Item item = new Item();
@@ -212,6 +212,130 @@ public class Database {
             pst.setInt(4, quantity);
             pst.executeUpdate();
             return true;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
+    // View suppliers.
+    public static ArrayList<Supplier> viewSupplier() {
+
+        ArrayList<Supplier> Arr = new ArrayList<>();
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers`");
+            rs = pst.executeQuery();
+
+            if (rs.first()) {
+
+                while (rs.next()) {
+                    Supplier supplier = new Supplier();
+                    supplier.setName(rs.getString(1));
+                    supplier.setEmail(rs.getString(2));
+                    supplier.setNumber(rs.getString(3));
+                    supplier.setAddress(rs.getString(4));
+                    supplier.setVatstatus(rs.getBoolean(5));
+                    Arr.add(supplier);
+                }
+
+                return Arr;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    // Inserts new supplier. Send through supplier object.
+    public static boolean insertSupplier(Supplier supplier) {
+        try {
+            connect_db();
+
+            PreparedStatement pst = conn.prepareStatement("SELECT * FROM suppliers WHERE name = " + supplier.getName() + "");
+            rs = pst.executeQuery();
+
+            if (!rs.first()) {
+
+                pst = conn.prepareStatement("INSERT INTO suppliers (name,email,number,address,varstatus) VALUES (?, ?, ?, ?, ?)");
+                pst.setString(1, supplier.getName());
+                pst.setString(2, supplier.getEmail());
+                pst.setString(3, supplier.getNumber());
+                pst.setString(4, supplier.getAddress());
+                pst.setBoolean(5, supplier.isVatstatus());
+                pst.executeUpdate();
+                return true;
+
+            } else {
+
+                return false;
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
+    // Deletes supplier.
+    public static boolean deleteSupplier(String name) {
+        try {
+            connect_db();
+
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + name + "");
+            rs = pst.executeQuery();
+
+            if (rs.first()) {
+
+                pst = conn.prepareStatement("DELETE FROM suppliers WHERE supplierid  = " + rs.getString(1) + "");
+                pst.executeUpdate();
+                return true;
+
+            } else {
+
+                return false;
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
+    // Updates supplier.
+    public static boolean updateSupplier(Supplier supplier) {
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + supplier.getName() + "");
+            rs = pst.executeQuery();
+
+            if (rs.first()) {
+
+                pst = conn.prepareStatement("UPDATE suppliers (name,email,number,address,varstatus) VALUES (?, ?, ?, ?, ?) WHERE supplierid = " + rs.getString(1) + "");
+                pst.setString(1, supplier.getName());
+                pst.setString(2, supplier.getEmail());
+                pst.setString(3, supplier.getNumber());
+                pst.setString(4, supplier.getAddress());
+                pst.setBoolean(5, supplier.isVatstatus());
+                pst.executeUpdate();
+                return true;
+
+            } else {
+
+                return false;
+
+            }
 
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
