@@ -46,7 +46,7 @@ public class Database {
         return password;
     }
 
-    public static ArrayList<Order> getOrders(int x) {
+    public ArrayList<Order> getOrders(int x) {
 
         ArrayList<Order> Arr = new ArrayList<>();
         String range;
