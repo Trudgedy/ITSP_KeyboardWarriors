@@ -194,6 +194,11 @@ public class OrderGUI extends javax.swing.JFrame {
         });
 
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         lblQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblQuantity.setText("Quantity:");
@@ -365,6 +370,23 @@ public class OrderGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtfieldQuantityCaretUpdate
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        //search
+        
+                //checkboxAvailable
+        if (txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+            //Refresh Table
+            updateTable();
+        } else if(!txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+            //Gets by name
+            
+        }else if(txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")){
+            
+            
+        }
+        
+    }//GEN-LAST:event_btnSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -430,10 +452,11 @@ public class OrderGUI extends javax.swing.JFrame {
         ArrayList<Item> itemArr = new ArrayList<>();
         itemArr = db.getItems();
         
+        DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+        model.setRowCount(0);
+            
         for (int i = 0; i < itemArr.size(); i++) {
-            
-            DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
-            
+ 
             boolean available = true;
             if (itemArr.get(i).getQuantity() == 0) {
                 available = false;

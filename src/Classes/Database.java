@@ -24,7 +24,7 @@ public class Database {
     static Statement statement;
     static ResultSet rs;
 
-    public static String[] getPassword(String username) {
+    public String[] getPassword(String username) {
 
         String[] password = new String[2];
 
@@ -48,7 +48,7 @@ public class Database {
     }
 
     // For reports. Will be implemented later.
-    public static ArrayList<Order> getOrders(int x) {
+    public ArrayList<Order> getOrders(int x) {
 
         ArrayList<Order> Arr = new ArrayList<>();
         String range;
@@ -88,7 +88,7 @@ public class Database {
 
     //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
-    public static ArrayList<Order> getPaidOrder() {
+    public ArrayList<Order> getPaidOrder() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
@@ -126,7 +126,7 @@ public class Database {
         } */
     }
 
-    public static ArrayList<Order> getUnpaidOrder() {
+    public ArrayList<Order> getUnpaidOrder() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
@@ -166,7 +166,7 @@ public class Database {
         } */
     }
 
-    public static ArrayList<Item> getItems() {
+    public ArrayList<Item> getItems() {
 
         ArrayList<Item> Arr = new ArrayList<>();
         try {
@@ -196,7 +196,7 @@ public class Database {
     }
 
     // Inserts new order.
-    public static boolean insertOrder(int itemid, int price, int quantity) {
+    public boolean insertOrder(int itemid, int price, int quantity) {
         try {
 
             Calendar calendar = Calendar.getInstance();
@@ -218,7 +218,7 @@ public class Database {
 
     }
 
-    public static boolean updateOrder(int orderid) {
+    public boolean updateOrder(int orderid) {
 
         try {
 
