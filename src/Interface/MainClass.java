@@ -23,7 +23,7 @@ public class MainClass {
 
         
         
-        if (userAuth.Login("trudgedy", "datashe2")) {
+        if (userAuth.Login("Andrew", "password")) {
 
             home.setVisible(true);
         } else{
