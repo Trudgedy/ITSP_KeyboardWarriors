@@ -297,7 +297,7 @@ public class HomeGUI extends javax.swing.JFrame {
         //Dispose HomeGUI
         this.dispose();
         //Create new ViewClientsGUI
-        new ViewClientsGUI().setVisible(true);
+        new ViewOrdersGUI().setVisible(true);
     }//GEN-LAST:event_btnClientsActionPerformed
 
     private void btnNewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewOrderActionPerformed
