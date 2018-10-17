@@ -135,7 +135,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userid`, `username`, `password`, `salt`) VALUES
-(1, 'Andrew', 'testestestestsetsetestestestes', 'doublewhammy');
+(1, 'Andrew', 'password', 'doublewhammy');
 
 --
 -- Indexes for dumped tables

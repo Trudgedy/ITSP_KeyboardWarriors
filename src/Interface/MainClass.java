@@ -15,18 +15,14 @@ public class MainClass {
         LoginGUI login = new LoginGUI();
         UserAuthentication userAuth = new UserAuthentication();
 
-        
-        
         if (userAuth.Login("Andrew", "password")) {
 
             home.setVisible(true);
-        } else{
+        } else {
 
             login.setVisible(true);
         }
-        
-        
-        
+
     }
 
 }

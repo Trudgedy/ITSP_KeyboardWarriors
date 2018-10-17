@@ -20,6 +20,22 @@ public class Order {
     private int orderid;
     private int quantity;
 
+    // FOR ANDREW.
+    public Order() {
+    }
+
+    // FOR ANDREW.
+    public Order(String date, String businessname, String item, int amount, int itemid, boolean paid, int orderid, int quantity) {
+        this.date = date;
+        this.businessname = businessname;
+        this.item = item;
+        this.amount = amount;
+        this.itemid = itemid;
+        this.paid = paid;
+        this.orderid = orderid;
+        this.quantity = quantity;
+    }
+
     public int getQuantity() {
         return quantity;
     }

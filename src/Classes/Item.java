@@ -12,10 +12,12 @@ public class Item {
     private int quantity;
     private int itemid;
 
+    // FOR ANDREW.
     public Item() {
 
     }
 
+    // FOR ANDREW.
     public Item(String itemName, String supplierName, int price, int quantity, int itemid) {
         this.itemName = itemName;
         this.supplierName = supplierName;

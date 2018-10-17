@@ -24,7 +24,6 @@ public class ReportsGUI extends javax.swing.JFrame {
      */
     public ReportsGUI() {
         initComponents();
-
         this.setLocationRelativeTo(null);
     }
 
@@ -291,7 +290,7 @@ public class ReportsGUI extends javax.swing.JFrame {
 
         //create a new model for the table and set headings
         DefaultTableModel model = new DefaultTableModel(0, 0);
-        String header[] = new String[]{"Date", "Description", "Amount"};
+        String header[] = new String[]{"Order ID", "Business", "Amount", "Date"};
         model.setColumnIdentifiers(header);
         reportTable.setModel(model);
 
@@ -300,6 +299,9 @@ public class ReportsGUI extends javax.swing.JFrame {
             Vector<Object> data = new Vector();
 
             //add data to row
+            data.add(orderList.get(i).getOrderid());
+            data.add(orderList.get(i).getBusinessname());
+            data.add(orderList.get(i).getAmount());
             data.add(orderList.get(i).getDate());
             data.add(orderList.get(i).getAmount());
 
