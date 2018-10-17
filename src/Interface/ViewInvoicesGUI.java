@@ -5,6 +5,11 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -17,6 +22,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
      */
     public ViewInvoicesGUI() {
         initComponents();
+        updateDatabase();
     }
 
     /**
@@ -202,4 +208,26 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
     private javax.swing.JPanel panelInvoices;
     private javax.swing.JTable tblInvoices;
     // End of variables declaration//GEN-END:variables
+
+    private void updateDatabase() {
+
+        Database db = new Database();
+        
+        ArrayList<Order> orderArr = new ArrayList<>();
+        orderArr = db.getPaidOrder();
+        
+        for (int i = 0; i < orderArr.size(); i++) {
+            DefaultTableModel model = (DefaultTableModel) tblInvoices.getModel();
+            
+            boolean available = true;
+            if (orderArr.get(i).getQuantity() == 0){
+                available = false;
+            }
+            
+            Object[] row = {orderArr.get(i).getOrderid(),
+                    orderArr.get(i).getBusinessname(), 
+                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+            model.addRow(row);
+        } 
+    }
 }

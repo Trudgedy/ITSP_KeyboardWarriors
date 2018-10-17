@@ -88,14 +88,14 @@ public class Database {
 
     //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
-    public static ArrayList<Order> getPaidOrder() {
+    public ArrayList<Order> getPaidOrder() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid WHERE paid = 1");
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            rs.next();
 
                 while (rs.next()) {
                     Order order = new Order();
@@ -107,9 +107,7 @@ public class Database {
                 }
 
                 return Arr;
-            } else {
-                return null;
-            }
+            
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;

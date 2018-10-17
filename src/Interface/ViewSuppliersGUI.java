@@ -5,11 +5,15 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 //import net.proteanit.sql.DbUtils;
 
 /**
@@ -24,6 +28,7 @@ public class ViewSuppliersGUI extends javax.swing.JFrame {
     public ViewSuppliersGUI() {
         displayTableRec(tblSuppliers);
         initComponents();
+    //    updateTable();
     }
 
     /**
@@ -243,4 +248,25 @@ public class ViewSuppliersGUI extends javax.swing.JFrame {
     private javax.swing.JPanel panelSuppliers;
     private javax.swing.JTable tblSuppliers;
     // End of variables declaration//GEN-END:variables
+    /*
+    private void updateTable() {
+        Database db = new Database();
+        
+        ArrayList<Order> orderArr = new ArrayList<>();
+        orderArr = db.getPaidOrder();
+        
+        for (int i = 0; i < orderArr.size(); i++) {
+            DefaultTableModel model = (DefaultTableModel) tblSuppliers.getModel();
+            
+            boolean available = true;
+            if (orderArr.get(i).getQuantity() == 0){
+                available = false;
+            }
+            
+            Object[] row = {orderArr.get(i).getOrderid(),
+                    orderArr.get(i).getBusinessname(), 
+                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+            model.addRow(row);
+        }
+    }*/
 }
