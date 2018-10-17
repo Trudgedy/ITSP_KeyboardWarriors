@@ -21,7 +21,9 @@ public class MainClass {
         LoginGUI login = new LoginGUI();
         UserAuthentication userAuth = new UserAuthentication();
 
-        if (userAuth.isLoggedIn()) {
+        
+        
+        if (userAuth.Login("trudgedy", "datashe2")) {
 
             home.setVisible(true);
         } else{
