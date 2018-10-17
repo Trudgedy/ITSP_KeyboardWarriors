@@ -24,7 +24,6 @@ public class ReportsGUI extends javax.swing.JFrame {
      */
     public ReportsGUI() {
         initComponents();
-        
         this.setLocationRelativeTo(null);
     }
 
