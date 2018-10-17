@@ -5,6 +5,16 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -17,6 +27,50 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
      */
     public ViewInvoicesGUI() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        
+        this.addWindowListener(new WindowAdapter() {
+            // Invoked when a window has been opened.
+            public void windowOpened(WindowEvent e) {
+                String user = "";
+                ArrayList<Order> invoiceList;
+
+                Database generate = new Database();
+
+                //Determine the period over which the report should span
+                switch(user) {
+                    case "Last Year":
+                        invoiceList = generate.getOrders(1);
+                        break;
+                    case "Last Month":
+                        invoiceList = generate.getOrders(2);
+                        break;
+                    default:
+                        final JPanel panel = new JPanel();
+                        JOptionPane.showMessageDialog(panel, "No entries found.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                }
+
+                //create a new model for the table and set headings
+                DefaultTableModel model = new DefaultTableModel(0, 0);
+                String header[] = new String[] { "Invoice Number", "Business", "TotalPrice", "Date"};
+                model.setColumnIdentifiers(header);
+                tblInvoices.setModel(model);
+
+                //iterate through the list of orders
+                for (int i = 0; i < invoiceList.size(); i++) {
+                    Vector<Object> data = new Vector();
+
+                    //add data to row
+                    data.add(invoiceList.get(i).getDate());
+                    data.add(invoiceList.get(i).getDescription());
+                    data.add(invoiceList.get(i).getAmount());
+
+                    //add row to table
+                    model.addRow(data);
+                }
+            }
+        });
     }
 
     /**
