@@ -12,11 +12,29 @@ package Classes;
 public class Order {
 
     private String date;
+    private String businessname;
+    private String item;
     private int amount;
     private int itemid;
     private boolean paid;
     private int orderid;
-    private String businessname;
+    private int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
 
     public String getBusinessname() {
         return businessname;

@@ -88,7 +88,7 @@ public class Database {
 
     //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
-    public static ArrayList<Order> getInvoice() {
+    public static ArrayList<Order> getPaidOrder() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
@@ -103,6 +103,46 @@ public class Database {
                     order.setBusinessname(rs.getString(2));
                     order.setAmount(rs.getInt(3));
                     order.setDate(rs.getString(4));
+                    Arr.add(order);
+                }
+
+                return Arr;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+        /* 
+        For anyone confused as to how to use this, here ArrayList<Order> Arr = Database.getOrders();
+        
+        for (int i = 0; i < Arr.size(); i++) {
+
+            System.out.println("The date is :" + Arr.get(i).getDate());
+            System.out.println("The amount is :" + Arr.get(i).getAmount());
+            System.out.println("The description is :" + Arr.get(i).getDescription());
+        } */
+    }
+
+    public static ArrayList<Order> getUnpaidOrder() {
+        ArrayList<Order> Arr = new ArrayList<>();
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT order_id , suppliers.name, amount, date, items.item, orders.quantity FROM `orders` INNER JOIN suppliers ON orders.itemid = suppliers.supplierid INNER JOIN items ON orders.itemid = items.itemid WHERE paid = 0");
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                while (rs.next()) {
+                    Order order = new Order();
+                    order.setOrderid(rs.getInt(1));
+                    order.setBusinessname(rs.getString(2));
+                    order.setAmount(rs.getInt(3));
+                    order.setDate(rs.getString(4));
+                    order.setItem(rs.getString(5)); // Returns the item name as well so that the user can at least see what they ordered.
+                    order.setQuantity(rs.getInt(6)); // Returns the orders quantity.
                     Arr.add(order);
                 }
 
@@ -158,17 +198,18 @@ public class Database {
     }
 
     // Inserts new order.
-    public static boolean insertOrder(int itemid, int price) {
+    public static boolean insertOrder(int itemid, int price, int quantity) {
         try {
 
             Calendar calendar = Calendar.getInstance();
             java.sql.Date date = new java.sql.Date(calendar.getTime().getTime());
 
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date) VALUES (?, ?, ?)");
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date,quantity) VALUES (?, ?, ?, ?)");
             pst.setInt(1, itemid);
             pst.setInt(2, price);
             pst.setDate(3, date, calendar);
+            pst.setInt(4, quantity);
             pst.executeUpdate();
             return true;
 
