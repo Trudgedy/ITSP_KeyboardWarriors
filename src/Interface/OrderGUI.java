@@ -381,8 +381,11 @@ public class OrderGUI extends javax.swing.JFrame {
             //Gets by name
             
         }else if(txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")){
+            //Get by supplier
             
-            
+        }else{
+           //Get by Supplier and Item 
+           
         }
         
     }//GEN-LAST:event_btnSearchActionPerformed

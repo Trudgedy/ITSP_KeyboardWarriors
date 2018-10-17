@@ -7,7 +7,6 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -26,33 +25,9 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
     public ViewInvoicesGUI() {
         initComponents();
         updateDatabase();
-            // Invoked when a window has been opened.
-            public void windowOpened(WindowEvent e) {
-                Database generate = new Database();
-                ArrayList<Order> invoiceList = generate.getPaidOrder();
-
-                //create a new model for the table and set headings
-                DefaultTableModel model = new DefaultTableModel(0, 0);
-                String header[] = new String[] {"Order ID", "Business", "Amount", "Date"};
-                model.setColumnIdentifiers(header);
-                tblInvoices.setModel(model);
-
-                //iterate through the list of orders
-                for (int i = 0; i < invoiceList.size(); i++) {
-                    Vector<Object> data = new Vector();
-
-                    //add data to row
-                    data.add(invoiceList.get(i).getOrderid());
-                    data.add(invoiceList.get(i).getBusinessname());
-                    data.add(invoiceList.get(i).getAmount());
-                    data.add(invoiceList.get(i).getDate());
-
-                    //add row to table
-                    model.addRow(data);
-                }
-            }
-        });
-    }
+            
+        }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
