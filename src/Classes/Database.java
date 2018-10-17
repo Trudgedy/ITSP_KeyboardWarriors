@@ -179,6 +179,24 @@ public class Database {
 
     }
 
+    public static boolean updateOrder(int orderid) {
+
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("UPDATE orders SET paid = (1) WHERE order_id = " + orderid + "");
+            pst.setInt(1, orderid);
+            pst.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
     static void connect_db() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
