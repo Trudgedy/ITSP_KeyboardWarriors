@@ -84,7 +84,7 @@ public class Database {
 
     //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
-    public static ArrayList<Order> getPaidOrder() {
+    public static ArrayList<Order> getPaidOrders() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
@@ -118,7 +118,7 @@ public class Database {
         } */
     }
 
-    public static ArrayList<Order> getUnpaidOrder() {
+    public static ArrayList<Order> getUnpaidOrders() {
         ArrayList<Order> Arr = new ArrayList<>();
         try {
             connect_db();
@@ -154,6 +154,42 @@ public class Database {
         } */
     }
 
+    // Retrieves the sales from the database to be used in the report generation.
+    public static ArrayList<Sale> getSales(int x) {
+
+        ArrayList<Sale> Arr = new ArrayList<>();
+        String range;
+
+        if (x == 1) {
+            range = "1 YEAR";
+        } else {
+            range = "1 MONTH";
+        }
+
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT dateofsale, sales.price, sales.quantity, items.item FROM `sales` INNER JOIN items ON sales.itemid = items.itemid WHERE dateofsale >= DATE(NOW()) - INTERVAL " + range + "");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Sale sale = new Sale();
+                sale.setDateofsale(rs.getString(1));
+                sale.setPrice(rs.getInt(2));
+                sale.setQuantity(rs.getInt(3));
+                sale.setItemName(rs.getString(4));
+                Arr.add(sale);
+            }
+
+            return Arr;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    //Retrieves all the items from database.
     public static ArrayList<Item> getItems() {
 
         ArrayList<Item> Arr = new ArrayList<>();
@@ -162,20 +198,99 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
 
-             
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemid(rs.getInt(1));
+                item.setItemName(rs.getString(2));
+                item.setPrice(rs.getInt(3));
+                item.setQuantity(rs.getInt(4));
+                item.setSupplierName(rs.getString(5));
+                Arr.add(item);
+            }
 
-                while (rs.next()) {
-                    Item item = new Item();
-                    item.setItemid(rs.getInt(1));
-                    item.setItemName(rs.getString(2));
-                    item.setPrice(rs.getInt(3));
-                    item.setQuantity(rs.getInt(4));
-                    item.setSupplierName(rs.getString(5));
-                    Arr.add(item);
-                }
+            return Arr;
 
-                return Arr;
-                 
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    //Retrieves item from the database with name as an identifier.
+    public static ArrayList<Item> getItemsByName(String Name) {
+
+        ArrayList<Item> Arr = new ArrayList<>();
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = " + Name + "");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemid(rs.getInt(1));
+                item.setItemName(rs.getString(2));
+                item.setPrice(rs.getInt(3));
+                item.setQuantity(rs.getInt(4));
+                item.setSupplierName(rs.getString(5));
+                Arr.add(item);
+            }
+            return Arr;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    //Retrieves item from the database with supplier as an identifier.
+    public static ArrayList<Item> getItemsBySupplier(String supplier) {
+
+        ArrayList<Item> Arr = new ArrayList<>();
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE suppliers.name = " + supplier + "");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemid(rs.getInt(1));
+                item.setItemName(rs.getString(2));
+                item.setPrice(rs.getInt(3));
+                item.setQuantity(rs.getInt(4));
+                item.setSupplierName(rs.getString(5));
+                Arr.add(item);
+            }
+            return Arr;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    //Retrieves item from the database with supplier and item name as an identifier.
+    public static ArrayList<Item> getItemsByNameAndSupplier(String name, String supplier) {
+
+        ArrayList<Item> Arr = new ArrayList<>();
+        try {
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = " + name + " AND suppliers.name = " + supplier + "");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemid(rs.getInt(1));
+                item.setItemName(rs.getString(2));
+                item.setPrice(rs.getInt(3));
+                item.setQuantity(rs.getInt(4));
+                item.setSupplierName(rs.getString(5));
+                Arr.add(item);
+            }
+            return Arr;
+
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;
