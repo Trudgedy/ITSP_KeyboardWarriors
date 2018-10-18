@@ -7,6 +7,7 @@ package Interface;
 
 import Classes.Database;
 import Classes.Item;
+import Classes.UserAuthentication;
 import java.util.ArrayList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -17,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Trudgedy
  */
 public class OrderGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form OrderGUI
      */
@@ -335,7 +336,7 @@ public class OrderGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
         
 
     }//GEN-LAST:event_btnHomeActionPerformed

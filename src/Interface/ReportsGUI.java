@@ -7,6 +7,7 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
+import Classes.UserAuthentication;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form Reports
      */
@@ -264,7 +265,7 @@ public class ReportsGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed

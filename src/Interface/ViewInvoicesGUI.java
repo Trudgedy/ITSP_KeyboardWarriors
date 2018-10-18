@@ -7,6 +7,7 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
+import Classes.UserAuthentication;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -18,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Tiltasaurus
  */
 public class ViewInvoicesGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form ViewInvoicesGUI
      */
@@ -165,7 +166,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**

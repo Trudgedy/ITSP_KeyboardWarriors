@@ -7,6 +7,7 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
+import Classes.UserAuthentication;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Heli
  */
 public class ViewSuppliersGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form ViewBusinesses
      */
@@ -205,7 +206,7 @@ public class ViewSuppliersGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
