@@ -26,6 +26,7 @@ private UserAuthentication userAuth = new UserAuthentication();
     public ViewInvoicesGUI() {
         initComponents();
         updateDatabase();
+        this.setLocationRelativeTo(null);
             
         }
     
@@ -219,7 +220,7 @@ private UserAuthentication userAuth = new UserAuthentication();
         Database db = new Database();
         
         ArrayList<Order> orderArr = new ArrayList<>();
-        orderArr = db.getPaidOrder();
+        orderArr = db.getPaidOrders();
         
         for (int i = 0; i < orderArr.size(); i++) {
             DefaultTableModel model = (DefaultTableModel) tblInvoices.getModel();
@@ -231,7 +232,8 @@ private UserAuthentication userAuth = new UserAuthentication();
             
             Object[] row = {orderArr.get(i).getOrderid(),
                     orderArr.get(i).getBusinessname(), 
-                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+                    orderArr.get(i).getAmount(), 
+                    orderArr.get(i).getDate()};
             model.addRow(row);
         } 
     }
