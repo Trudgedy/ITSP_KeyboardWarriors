@@ -9,7 +9,6 @@ import Classes.Database;
 import Classes.Order;
 import Classes.UserAuthentication;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -297,17 +296,16 @@ private UserAuthentication userAuth = new UserAuthentication();
 
         //iterate through the list of orders
         for (int i = 0; i < orderList.size(); i++) {
-            Vector<Object> data = new Vector();
-
             //add data to row
-            data.add(orderList.get(i).getOrderid());
-            data.add(orderList.get(i).getBusinessname());
-            data.add(orderList.get(i).getAmount());
-            data.add(orderList.get(i).getDate());
-            data.add(orderList.get(i).getAmount());
+            Object[] row = {
+                orderList.get(i).getOrderid(),
+                orderList.get(i).getBusinessname(), 
+                orderList.get(i).getAmount(), 
+                orderList.get(i).getDate()
+            };
 
             //add row to table
-            model.addRow(data);
+            model.addRow(row);
         }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
