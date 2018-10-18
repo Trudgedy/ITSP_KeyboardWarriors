@@ -30,6 +30,7 @@ public class Database {
 
         try {
             connect_db();
+            System.out.println(username);
             PreparedStatement pst = conn.prepareStatement("SELECT password,salt FROM `user` WHERE username=?");
             pst.setString(1, username);
             rs = pst.executeQuery();
@@ -460,7 +461,7 @@ public class Database {
     static void connect_db() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/itspdb", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:8080/itspdb", "root", "");
             statement = conn.createStatement();
             System.out.println("Database connection successful.");
         } catch (SQLException | ClassNotFoundException e) {
