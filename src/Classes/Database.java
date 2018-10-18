@@ -154,12 +154,8 @@ public class Database {
         } */
     }
 
-<<<<<<< HEAD
     //Retrieves all the items from database.
     public static ArrayList<Item> getItem() {
-=======
-    public static ArrayList<Item> getItems() {
->>>>>>> remotes/origin/master
 
         ArrayList<Item> Arr = new ArrayList<>();
         try {
@@ -167,20 +163,18 @@ public class Database {
             PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid");
             rs = pst.executeQuery();
 
-             
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemid(rs.getInt(1));
+                item.setItemName(rs.getString(2));
+                item.setPrice(rs.getInt(3));
+                item.setQuantity(rs.getInt(4));
+                item.setSupplierName(rs.getString(5));
+                Arr.add(item);
+            }
 
-                while (rs.next()) {
-                    Item item = new Item();
-                    item.setItemid(rs.getInt(1));
-                    item.setItemName(rs.getString(2));
-                    item.setPrice(rs.getInt(3));
-                    item.setQuantity(rs.getInt(4));
-                    item.setSupplierName(rs.getString(5));
-                    Arr.add(item);
-                }
+            return Arr;
 
-                return Arr;
-                 
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
             return null;
