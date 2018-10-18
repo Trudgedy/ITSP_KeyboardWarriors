@@ -5,19 +5,30 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
+import Classes.UserAuthentication;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
  * @author Tiltasaurus
  */
 public class ViewInvoicesGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form ViewInvoicesGUI
      */
     public ViewInvoicesGUI() {
         initComponents();
-    }
+        updateDatabase();
+            
+        }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -155,7 +166,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -202,4 +213,26 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
     private javax.swing.JPanel panelInvoices;
     private javax.swing.JTable tblInvoices;
     // End of variables declaration//GEN-END:variables
+
+    private void updateDatabase() {
+
+        Database db = new Database();
+        
+        ArrayList<Order> orderArr = new ArrayList<>();
+        orderArr = db.getPaidOrder();
+        
+        for (int i = 0; i < orderArr.size(); i++) {
+            DefaultTableModel model = (DefaultTableModel) tblInvoices.getModel();
+            
+            boolean available = true;
+            if (orderArr.get(i).getQuantity() == 0){
+                available = false;
+            }
+            
+            Object[] row = {orderArr.get(i).getOrderid(),
+                    orderArr.get(i).getBusinessname(), 
+                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+            model.addRow(row);
+        } 
+    }
 }

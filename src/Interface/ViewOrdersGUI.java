@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import Classes.UserAuthentication;
 import javax.swing.*;
 
 /**
@@ -12,7 +13,7 @@ import javax.swing.*;
  * @author Heli
  */
 public class ViewOrdersGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form ViewData
      */
@@ -181,7 +182,7 @@ public class ViewOrdersGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**

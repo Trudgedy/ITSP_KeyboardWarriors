@@ -7,6 +7,7 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
+import Classes.UserAuthentication;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JPanel;
@@ -18,13 +19,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form Reports
      */
     public ReportsGUI() {
         initComponents();
-
         this.setLocationRelativeTo(null);
     }
 
@@ -265,7 +265,7 @@ public class ReportsGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
@@ -291,7 +291,7 @@ public class ReportsGUI extends javax.swing.JFrame {
 
         //create a new model for the table and set headings
         DefaultTableModel model = new DefaultTableModel(0, 0);
-        String header[] = new String[]{"Date", "Description", "Amount"};
+        String header[] = new String[]{"Order ID", "Business", "Amount", "Date"};
         model.setColumnIdentifiers(header);
         reportTable.setModel(model);
 
@@ -300,8 +300,10 @@ public class ReportsGUI extends javax.swing.JFrame {
             Vector<Object> data = new Vector();
 
             //add data to row
+            data.add(orderList.get(i).getOrderid());
+            data.add(orderList.get(i).getBusinessname());
+            data.add(orderList.get(i).getAmount());
             data.add(orderList.get(i).getDate());
-            data.add(orderList.get(i).getDescription());
             data.add(orderList.get(i).getAmount());
 
             //add row to table

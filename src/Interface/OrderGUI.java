@@ -5,17 +5,43 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Item;
+import Classes.UserAuthentication;
+import java.util.ArrayList;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Trudgedy
  */
 public class OrderGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form OrderGUI
      */
     public OrderGUI() {
         initComponents();
+        updateTable();
+        
+        txtfieldQuantity.getDocument().addDocumentListener(new DocumentListener() {
+            
+            public void changedUpdate(DocumentEvent e) {
+                sliderQuantity.setValue(Integer.parseInt(txtfieldQuantity.getText()));
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                sliderQuantity.setValue(Integer.parseInt(txtfieldQuantity.getText()));
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+               
+            }
+        });
     }
 
     /**
@@ -58,15 +84,27 @@ public class OrderGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item", "Price", "Supplier", "Availability"
+                "Item", "Price", "Supplier", "Available"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Boolean.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
             };
 
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        OrderTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OrderTableMouseClicked(evt);
             }
         });
         scrollPaneTable.setViewportView(OrderTable);
@@ -157,9 +195,32 @@ public class OrderGUI extends javax.swing.JFrame {
         });
 
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         lblQuantity.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblQuantity.setText("Quantity:");
+
+        sliderQuantity.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderQuantityStateChanged(evt);
+            }
+        });
+
+        txtfieldQuantity.setText("1");
+        txtfieldQuantity.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtfieldQuantityCaretUpdate(evt);
+            }
+        });
+        txtfieldQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfieldQuantityActionPerformed(evt);
+            }
+        });
 
         lblPriceInfo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblPriceInfo.setText("Total Price:");
@@ -242,12 +303,11 @@ public class OrderGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(panelFooter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(panelOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(panelHeader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelHeader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -276,8 +336,60 @@ public class OrderGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
+        
+
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void OrderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderTableMouseClicked
+        //When the table is clicked 
+
+        int selectedRow = OrderTable.getSelectedRow();
+        
+        String name = OrderTable.getModel().getValueAt(selectedRow, 0).toString();
+        String supplier = OrderTable.getModel().getValueAt(selectedRow, 2).toString();
+        boolean isChecked = (boolean) OrderTable.getModel().getValueAt(selectedRow, 3);
+        
+        txtfieldItem.setText(name);
+        txtfieldSupplier.setText(supplier);
+        checkboxAvailable.setSelected(isChecked);
+    }//GEN-LAST:event_OrderTableMouseClicked
+
+    private void sliderQuantityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderQuantityStateChanged
+        // TODO add your handling code here:
+        txtfieldQuantity.setText(sliderQuantity.getValue() + "");
+    }//GEN-LAST:event_sliderQuantityStateChanged
+    
+
+    private void txtfieldQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfieldQuantityActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtfieldQuantityActionPerformed
+
+    private void txtfieldQuantityCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtfieldQuantityCaretUpdate
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtfieldQuantityCaretUpdate
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        //search
+        
+                //checkboxAvailable
+        if (txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+            //Refresh Table
+            updateTable();
+        } else if(!txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+            //Gets by name
+            
+        }else if(txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")){
+            //Get by supplier
+            
+        }else{
+           //Get by Supplier and Item 
+           
+        }
+        
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -337,4 +449,25 @@ public class OrderGUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtfieldQuantity;
     private javax.swing.JTextField txtfieldSupplier;
     // End of variables declaration//GEN-END:variables
+
+    private void updateTable() {
+        Database db = new Database();
+        
+        ArrayList<Item> itemArr = new ArrayList<>();
+        itemArr = db.getItems();
+        
+        DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+        model.setRowCount(0);
+            
+        for (int i = 0; i < itemArr.size(); i++) {
+ 
+            boolean available = true;
+            if (itemArr.get(i).getQuantity() == 0) {
+                available = false;
+            }
+            
+            Object[] row = {itemArr.get(i).getItemName(), itemArr.get(i).getPrice(), itemArr.get(i).getSupplierName(), available};
+            model.addRow(row);
+        }
+    }
 }
