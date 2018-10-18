@@ -28,10 +28,6 @@ USE itspdb;
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `orders`
---
-
 CREATE TABLE `items` (
   `item` varchar(255) NOT NULL,
   `price` int(11) NOT NULL,
@@ -78,8 +74,7 @@ INSERT INTO `orders` (`order_id`, `date`, `quantity`, `amount`, `paid`, `itemid`
 (11, '2018-09-13', 0, 9600, 0, 0),
 (12, '2018-09-15', 0, 3500, 0, 0),
 (13, '2018-10-17', 0, 6000, 0, 1),
-(14, '2018-10-17', 0, 9630, 0, 1),
-(15, '0000-00-00', 0, 3685, 0, 1);
+(14, '2018-10-17', 0, 9630, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +110,8 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`supplierid`, `name`, `email`, `number`, `address`, `vatstatus`) VALUES
-(1, 'TestBusiness', 'notarealbusiness@gmail.com', '123456789', 'Not a real stress 18', 0);
+(1, 'TestBusiness', 'notarealbusiness@gmail.com', '123456789', 'Not a real stress 18', 0),
+(2, 'newTestBusiness', 'sendhelpplease@gmail.com', '123456789', 'Stillcantthinkofastreet', 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +184,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -200,7 +196,7 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `supplierid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `supplierid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
