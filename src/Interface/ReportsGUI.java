@@ -224,11 +224,11 @@ private UserAuthentication userAuth = new UserAuthentication();
         switch (period) {
             case "Last Year":
                 income = generate.getSales(1);
-                expenses = generate.getPaidOrders();
+                expenses = generate.getPaidOrders(1);
                 break;
             case "Last Month":
                 income = generate.getSales(2);
-                expenses = generate.getPaidOrders();
+                expenses = generate.getPaidOrders(2);
                 break;
             default:
                 final JPanel panel = new JPanel();
