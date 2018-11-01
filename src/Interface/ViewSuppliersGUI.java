@@ -91,10 +91,7 @@ private UserAuthentication userAuth = new UserAuthentication();
 
         tblSuppliers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Business Name", "Email", "Tel", "Adress", "Quakified for VAT"
