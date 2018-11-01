@@ -5,10 +5,8 @@
  */
 package Interface;
 
-import Classes.Database;
-import Classes.Order;
 import Classes.UserAuthentication;
-import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -56,9 +54,9 @@ public class LoginGUI extends javax.swing.JFrame {
 
         jLabel1.setText("Username:");
 
-        UsernameTxt.setText("Username");
+        UsernameTxt.setToolTipText("Username");
 
-        PasswordTxt.setText("******");
+        PasswordTxt.setToolTipText("******");
         PasswordTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PasswordTxtActionPerformed(evt);
@@ -129,8 +127,13 @@ public class LoginGUI extends javax.swing.JFrame {
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
         
         if (userAuth.Login(UsernameTxt.getText(), PasswordTxt.getText())) {
-            new HomeGUI(userAuth).setVisible(true);
+            HomeGUI home = new HomeGUI(userAuth);
+            home.setVisible(true);
+            this.setVisible(false);
             this.dispose();
+        }else {
+            
+            JOptionPane.showMessageDialog(null, "Invalid username or password");
         }
                 
                 

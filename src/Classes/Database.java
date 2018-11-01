@@ -30,7 +30,6 @@ public class Database {
 
         try {
             connect_db();
-            System.out.println(username);
             PreparedStatement pst = conn.prepareStatement("SELECT password,salt FROM `user` WHERE username=?");
             pst.setString(1, username);
             rs = pst.executeQuery();
@@ -231,7 +230,7 @@ public class Database {
         ArrayList<Item> Arr = new ArrayList<>();
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = " + Name + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = '" + Name + "'");
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -307,15 +306,15 @@ public class Database {
     }
 
     // Inserts new order.
-    public static boolean insertOrder(int itemid, int price, int quantity) {
+    public static boolean insertOrder(int itemId, int price, int quantity) {
         try {
 
             Calendar calendar = Calendar.getInstance();
             java.sql.Date date = new java.sql.Date(calendar.getTime().getTime());
 
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date,quantity) VALUES (?, ?, ?, ?)");
-            pst.setInt(1, itemid);
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date,quantity,paid) VALUES (?, ?, ?, ?, 0)");
+            pst.setInt(1, itemId);
             pst.setInt(2, price);
             pst.setDate(3, date, calendar);
             pst.setInt(4, quantity);
@@ -350,6 +349,36 @@ public class Database {
             }
 
             return Arr;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+    
+    public static Supplier GetSupplierByName(String name) {
+
+        
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers` WHERE name = '" + name + "'");
+            
+            rs = pst.executeQuery();
+            Supplier supplier = new Supplier();
+            
+            while (rs.next()) {
+                
+                supplier.setName(rs.getString(1));
+                supplier.setEmail(rs.getString(2));
+                supplier.setNumber(rs.getString(3));
+                supplier.setAddress(rs.getString(4));
+                supplier.setVatstatus(rs.getBoolean(5));
+                
+            }
+            System.out.println(supplier.getName());
+            return supplier;
 
         } catch (SQLException e) {
             System.out.println("Caught exception: " + e);
@@ -468,7 +497,7 @@ public class Database {
     static void connect_db() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:8080/itspdb", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/itspdb", "root", "");
             statement = conn.createStatement();
             System.out.println("Database connection successful.");
         } catch (SQLException | ClassNotFoundException e) {
