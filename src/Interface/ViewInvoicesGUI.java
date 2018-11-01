@@ -52,10 +52,7 @@ private UserAuthentication userAuth = new UserAuthentication();
 
         tblInvoices.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Invoice Number", "Business", "Total Price", "Date"
