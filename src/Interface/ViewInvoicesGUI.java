@@ -8,9 +8,7 @@ package Interface;
 import Classes.Database;
 import Classes.Order;
 import Classes.UserAuthentication;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -220,7 +218,7 @@ private UserAuthentication userAuth = new UserAuthentication();
         Database db = new Database();
         
         ArrayList<Order> orderArr = new ArrayList<>();
-        orderArr = db.getPaidOrders();
+        orderArr = db.getPaidOrders(1);
         
         for (int i = 0; i < orderArr.size(); i++) {
             DefaultTableModel model = (DefaultTableModel) tblInvoices.getModel();
