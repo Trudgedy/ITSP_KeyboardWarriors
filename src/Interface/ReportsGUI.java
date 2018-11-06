@@ -314,7 +314,7 @@ private UserAuthentication userAuth = new UserAuthentication();
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
-        // TODO add your handling code here:
+        //create new document
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         
         try {
