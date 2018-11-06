@@ -9,10 +9,23 @@ import Classes.Database;
 import Classes.Order;
 import Classes.Sale;
 import Classes.UserAuthentication;
+import com.itextpdf.text.BaseColor;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +33,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ReportsGUI extends javax.swing.JFrame {
 private UserAuthentication userAuth = new UserAuthentication();
+
+    private ArrayList<Sale> income;
+    private ArrayList<Order> expenses;
+    private String totalLabelText;
+
     /**
      * Creates new form Reports
      */
@@ -212,8 +230,8 @@ private UserAuthentication userAuth = new UserAuthentication();
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         String reportType = reportTypeComboBox.getSelectedItem().toString();
         String period = periodComboBox.getSelectedItem().toString();
-        ArrayList<Sale> income;
-        ArrayList<Order> expenses;
+        income = null;
+        expenses = null;
         int incomeAmount = 0;
         int expensesAmount = 0;
         int turnover = 0;
@@ -283,15 +301,91 @@ private UserAuthentication userAuth = new UserAuthentication();
         turnover = incomeAmount - expensesAmount;
         
         if(reportType.equals("Profit")){
-            totalLabel.setText("Total profit is: R"+incomeAmount);
+            totalLabelText = "Total profit is: R "+incomeAmount;
         }
         else {
-            totalLabel.setText("Total turnover is: R"+turnover);
+            totalLabelText = "Total turnover is: R "+turnover;
         }
+        
+        totalLabel.setText(totalLabelText);
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
         // TODO add your handling code here:
+        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+        
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream("../Report.pdf"));
+        } catch (FileNotFoundException | DocumentException ex) {
+            Logger.getLogger(ReportsGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        document.open();
+        
+        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        
+        //create headings
+        Paragraph incomeHeading = new Paragraph("Income", font);
+        Paragraph expensesHeading = new Paragraph("Expenses", font);
+        Paragraph label = new Paragraph(totalLabelText);
+        Paragraph space = new Paragraph("");
+
+        //create income table within pdf
+        PdfPTable incomePdfTable = new PdfPTable(4);
+        incomePdfTable.setSpacingBefore(25);
+        incomePdfTable.setSpacingAfter(25);
+        
+        //declare column headings
+        incomePdfTable.addCell("Date of Sale");
+        incomePdfTable.addCell("Price");
+        incomePdfTable.addCell("Quantity");
+        incomePdfTable.addCell("Item Name");
+        
+        //iterate through the list of sales
+        for (int i = 0; i < income.size(); i++) {
+            //add cells to row
+            incomePdfTable.addCell(income.get(i).getDateofsale());
+            incomePdfTable.addCell("R " + income.get(i).getPrice());
+            incomePdfTable.addCell(income.get(i).getQuantity() + "");
+            incomePdfTable.addCell(income.get(i).getItemName());
+        }
+        
+        //create expenses table within pdf
+        PdfPTable expensesPdfTable = new PdfPTable(4);
+        expensesPdfTable.setSpacingBefore(25);
+        expensesPdfTable.setSpacingAfter(25);
+        
+        //declare column headings
+        expensesPdfTable.addCell("Order ID");
+        expensesPdfTable.addCell("Business Name");
+        expensesPdfTable.addCell("Amount");
+        expensesPdfTable.addCell("Date");
+        
+        //iterate through the list of orders
+        for (int i = 0; i < expenses.size(); i++) {
+            //add cells to row
+            expensesPdfTable.addCell(expenses.get(i).getOrderid() + "");
+            expensesPdfTable.addCell(expenses.get(i).getBusinessname());
+            expensesPdfTable.addCell("R " + expenses.get(i).getAmount());
+            expensesPdfTable.addCell(expenses.get(i).getDate());
+        }
+        
+        //add headings, spaces and tables to pdf
+        try {
+            document.add(incomeHeading);
+            document.add(space);
+            document.add(incomePdfTable);
+            document.add(expensesHeading);
+            document.add(space);
+            document.add(expensesPdfTable);
+            document.add(label);
+        } catch (DocumentException ex) {
+            Logger.getLogger(ReportsGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        document.close();
+        
+        JOptionPane.showMessageDialog(null, "Report Saved");
     }//GEN-LAST:event_saveAsPdfButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
