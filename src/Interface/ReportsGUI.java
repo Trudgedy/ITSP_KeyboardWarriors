@@ -3,6 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+//requires iText jar, available at http://www.java2s.com/Code/Jar/i/Downloaditextpdf543jar.htm
+
 package Interface;
 
 import Classes.Database;
