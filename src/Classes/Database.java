@@ -356,28 +356,26 @@ public class Database {
         }
 
     }
-    
-    public static Supplier GetSupplierByName(String name) {
 
-        
+    public static Supplier getSupplierByName(String name) {
+
         try {
 
             connect_db();
             PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers` WHERE name = '" + name + "'");
-            
+
             rs = pst.executeQuery();
             Supplier supplier = new Supplier();
-            
+
             while (rs.next()) {
-                
+
                 supplier.setName(rs.getString(1));
                 supplier.setEmail(rs.getString(2));
                 supplier.setNumber(rs.getString(3));
                 supplier.setAddress(rs.getString(4));
                 supplier.setVatstatus(rs.getBoolean(5));
-                
+
             }
-            System.out.println(supplier.getName());
             return supplier;
 
         } catch (SQLException e) {
@@ -387,17 +385,34 @@ public class Database {
 
     }
 
+    public static boolean ifSupplierExists(String name) {
+
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers` WHERE name = '" + name + "'");
+            rs = pst.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
     // Inserts new supplier. Send through supplier object.
     public static boolean insertSupplier(Supplier supplier) {
         try {
             connect_db();
 
-            PreparedStatement pst = conn.prepareStatement("SELECT * FROM suppliers WHERE name = " + supplier.getName() + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT * FROM suppliers WHERE name = '" + supplier.getName() + "'");
             rs = pst.executeQuery();
 
             if (!rs.next()) {
 
-                pst = conn.prepareStatement("INSERT INTO suppliers (name,email,number,address,varstatus) VALUES (?, ?, ?, ?, ?)");
+                pst = conn.prepareStatement("INSERT INTO suppliers (name,email,number,address,vatstatus) VALUES (?, ?, ?, ?, ?)");
                 pst.setString(1, supplier.getName());
                 pst.setString(2, supplier.getEmail());
                 pst.setString(3, supplier.getNumber());
@@ -423,13 +438,13 @@ public class Database {
     public static boolean deleteSupplier(String name) {
         try {
             connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = '" + name + "'");
 
-            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + name + "");
             rs = pst.executeQuery();
 
             if (rs.next()) {
 
-                pst = conn.prepareStatement("DELETE FROM suppliers WHERE supplierid  = " + rs.getString(1) + "");
+                pst = conn.prepareStatement("DELETE FROM suppliers WHERE supplierid  = " + rs.getInt(1) + "");
                 pst.executeUpdate();
                 return true;
 
@@ -450,7 +465,7 @@ public class Database {
     public static boolean updateSupplier(Supplier supplier) {
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + supplier.getName() + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = '" + supplier.getName() + "'");
             rs = pst.executeQuery();
 
             if (rs.next()) {
@@ -481,8 +496,32 @@ public class Database {
 
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("UPDATE orders SET paid = (1) WHERE order_id = " + orderid + "");
-            pst.setInt(1, orderid);
+            PreparedStatement pst = conn.prepareStatement("UPDATE orders SET paid = (?) WHERE order_id = " + orderid + "");
+            pst.setInt(1, 1);
+            pst.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
+    public static boolean updateOrderQuantity(int itemid, int quantity) {
+
+        try {
+            connect_db();
+            PreparedStatement selectpst = conn.prepareStatement("SELECT quantity FROM items WHERE itemid = " + itemid + "");
+            rs = selectpst.executeQuery();
+            int totalquantity = quantity;
+            if (rs.next()) {
+                totalquantity = rs.getInt("quantity") - quantity;
+            }
+
+            PreparedStatement pst = conn.prepareStatement("UPDATE items SET quantity = (?) WHERE itemid = " + itemid + "");
+            pst.setInt(1, totalquantity);
             pst.executeUpdate();
             return true;
 
@@ -499,7 +538,6 @@ public class Database {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost/itspdb", "root", "");
             statement = conn.createStatement();
-            System.out.println("Database connection successful.");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.print("Could not connect connect to the database. - Error:" + e);
         }

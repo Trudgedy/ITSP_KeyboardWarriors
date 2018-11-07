@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 //requires iText jar, available at http://www.java2s.com/Code/Jar/i/Downloaditextpdf543jar.htm
-
 package Interface;
 
 import Classes.Database;
@@ -35,7 +33,8 @@ import java.util.logging.Logger;
  * @author Alastair
  */
 public class ReportsGUI extends javax.swing.JFrame {
-private UserAuthentication userAuth = new UserAuthentication();
+
+    private UserAuthentication userAuth = new UserAuthentication();
 
     private ArrayList<Sale> income;
     private ArrayList<Order> expenses;
@@ -266,67 +265,68 @@ private UserAuthentication userAuth = new UserAuthentication();
         //iterate through the list of sales
         for (int i = 0; i < income.size(); i++) {
             incomeAmount = incomeAmount + income.get(i).getPrice();
-            
+
             //add data to row
             Object[] incomeRow = {
                 income.get(i).getDateofsale(),
-                income.get(i).getPrice(), 
-                income.get(i).getQuantity(), 
+                income.get(i).getPrice(),
+                income.get(i).getQuantity(),
                 income.get(i).getItemName()
             };
 
             //add row to table
             incomeModel.addRow(incomeRow);
         }
-        
+
         //create a new model for the table and set headings
         DefaultTableModel expensesModel = new DefaultTableModel(0, 0);
         String expensesHeader[] = new String[]{"Order ID", "Business Name", "Amount", "Date"};
         expensesModel.setColumnIdentifiers(expensesHeader);
         expensesTable.setModel(expensesModel);
-        
+
         //iterate through the list of orders
         for (int i = 0; i < expenses.size(); i++) {
             expensesAmount = expensesAmount + expenses.get(i).getAmount();
-            
+
             //add data to row
             Object[] incomeRow = {
                 expenses.get(i).getOrderid(),
-                expenses.get(i).getBusinessname(), 
-                expenses.get(i).getAmount(), 
+                expenses.get(i).getBusinessname(),
+                expenses.get(i).getAmount(),
                 expenses.get(i).getDate()
             };
 
             //add row to table
             expensesModel.addRow(incomeRow);
         }
-        
+
         turnover = incomeAmount - expensesAmount;
-        
-        if(reportType.equals("Profit")){
-            totalLabelText = "Total profit is: R "+incomeAmount;
+
+        if (reportType.equals("Profit")) {
+            totalLabelText = "Total profit is: R " + incomeAmount;
+        } else {
+            totalLabelText = "Total turnover is: R " + turnover;
         }
-        else {
-            totalLabelText = "Total turnover is: R "+turnover;
-        }
-        
+
         totalLabel.setText(totalLabelText);
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void saveAsPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsPdfButtonActionPerformed
         //create new document
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-        
+
         try {
             PdfWriter.getInstance(document, new FileOutputStream("../Report.pdf"));
-        } catch (FileNotFoundException | DocumentException ex) {
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ReportsGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
             Logger.getLogger(ReportsGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         document.open();
-        
+
         Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        
+
         //create headings
         Paragraph incomeHeading = new Paragraph("Income", font);
         Paragraph expensesHeading = new Paragraph("Expenses", font);
@@ -337,13 +337,13 @@ private UserAuthentication userAuth = new UserAuthentication();
         PdfPTable incomePdfTable = new PdfPTable(4);
         incomePdfTable.setSpacingBefore(25);
         incomePdfTable.setSpacingAfter(25);
-        
+
         //declare column headings
         incomePdfTable.addCell("Date of Sale");
         incomePdfTable.addCell("Price");
         incomePdfTable.addCell("Quantity");
         incomePdfTable.addCell("Item Name");
-        
+
         //iterate through the list of sales
         for (int i = 0; i < income.size(); i++) {
             //add cells to row
@@ -352,18 +352,18 @@ private UserAuthentication userAuth = new UserAuthentication();
             incomePdfTable.addCell(income.get(i).getQuantity() + "");
             incomePdfTable.addCell(income.get(i).getItemName());
         }
-        
+
         //create expenses table within pdf
         PdfPTable expensesPdfTable = new PdfPTable(4);
         expensesPdfTable.setSpacingBefore(25);
         expensesPdfTable.setSpacingAfter(25);
-        
+
         //declare column headings
         expensesPdfTable.addCell("Order ID");
         expensesPdfTable.addCell("Business Name");
         expensesPdfTable.addCell("Amount");
         expensesPdfTable.addCell("Date");
-        
+
         //iterate through the list of orders
         for (int i = 0; i < expenses.size(); i++) {
             //add cells to row
@@ -372,7 +372,7 @@ private UserAuthentication userAuth = new UserAuthentication();
             expensesPdfTable.addCell("R " + expenses.get(i).getAmount());
             expensesPdfTable.addCell(expenses.get(i).getDate());
         }
-        
+
         //add headings, spaces and tables to pdf
         try {
             document.add(incomeHeading);
@@ -385,9 +385,9 @@ private UserAuthentication userAuth = new UserAuthentication();
         } catch (DocumentException ex) {
             Logger.getLogger(ReportsGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         document.close();
-        
+
         JOptionPane.showMessageDialog(null, "Report Saved");
     }//GEN-LAST:event_saveAsPdfButtonActionPerformed
 

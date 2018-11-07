@@ -14,15 +14,15 @@ import javax.swing.JOptionPane;
  */
 public class LoginGUI extends javax.swing.JFrame {
 
-     private UserAuthentication userAuth = new UserAuthentication();
-     
+    private UserAuthentication userAuth = new UserAuthentication();
+
     /**
      * Creates new form Login
      */
     public LoginGUI(UserAuthentication UserAuth) {
         initComponents();
         userAuth = UserAuth;
-        
+
     }
 
     /**
@@ -125,18 +125,18 @@ public class LoginGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordTxtActionPerformed
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-        
+
         if (userAuth.Login(UsernameTxt.getText(), PasswordTxt.getText())) {
             HomeGUI home = new HomeGUI(userAuth);
             home.setVisible(true);
             this.setVisible(false);
             this.dispose();
-        }else {
-            
+        } else {
+
             JOptionPane.showMessageDialog(null, "Invalid username or password");
         }
-                
-                
+
+
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     /**

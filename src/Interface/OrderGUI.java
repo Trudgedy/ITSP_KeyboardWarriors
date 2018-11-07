@@ -394,7 +394,7 @@ public class OrderGUI extends javax.swing.JFrame {
             //Get by supplier
 
         } else {
-           //Get by Supplier and Item 
+            //Get by Supplier and Item 
 
         }
 
@@ -403,19 +403,19 @@ public class OrderGUI extends javax.swing.JFrame {
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
         Database db = new Database();
         int selectedIndex = OrderTable.getSelectedRow();
-                
+
         String name = OrderTable.getValueAt(selectedIndex, 0).toString();
-        int price = Integer.parseInt( OrderTable.getValueAt(selectedIndex, 1).toString());
+        int price = Integer.parseInt(OrderTable.getValueAt(selectedIndex, 1).toString());
         String isAvailable = OrderTable.getValueAt(selectedIndex, 3).toString();
         int quantity = Integer.parseInt(txtfieldQuantity.getText());
         int itemId = db.getItemsByName(name).get(0).getItemid();
-        
-        
+
         if (isAvailable.equalsIgnoreCase("true")) {
             db.insertOrder(itemId, price, quantity);
+            db.updateOrderQuantity(itemId, quantity);
             JOptionPane.showMessageDialog(null, "Order Complete");
-        }else {
-            
+        } else {
+
             JOptionPane.showMessageDialog(null, "Item not available");
         }
 

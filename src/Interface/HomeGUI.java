@@ -12,28 +12,26 @@ import Classes.UserAuthentication;
  *
  * @author Tiltasaurus
  */
-
-
 public class HomeGUI extends javax.swing.JFrame {
 
     private UserAuthentication userAuth = new UserAuthentication();
-    
-    
+
     /**
      * Creates new form HomeGUI
+     *
      * @param userAuth
      */
     public HomeGUI(UserAuthentication UserAuth) {
         initComponents();
-        
+
         this.userAuth = UserAuth;
-        
+
         if (!userAuth.isLoggedIn()) {
             this.dispose();
-            
+
             new LoginGUI(userAuth).setVisible(true);
         }
-        
+
     }
 
     /**
@@ -93,7 +91,7 @@ public class HomeGUI extends javax.swing.JFrame {
         panelView.setName(""); // NOI18N
 
         btnClients.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnClients.setText("View Clients");
+        btnClients.setText("View unpaid orders");
         btnClients.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientsActionPerformed(evt);
@@ -319,21 +317,21 @@ public class HomeGUI extends javax.swing.JFrame {
         //Dispose HomeGUI
         this.dispose();
         //Create new OrderGUI
-        new OrderGUI().setVisible(true);        
+        new OrderGUI().setVisible(true);
     }//GEN-LAST:event_btnNewOrderActionPerformed
 
     private void btnReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportsActionPerformed
         //Dispose HomeGUI
         this.dispose();
         //Create new ReportsGUI
-        new ReportsGUI().setVisible(true);        
+        new ReportsGUI().setVisible(true);
     }//GEN-LAST:event_btnReportsActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         //Logout
-    //TODO: send current login data
-    //    UserAuthentication userAuth = new UserAuthentication();
-    //    userAuth.logOut();
+        //TODO: send current login data
+        //    UserAuthentication userAuth = new UserAuthentication();
+        //    userAuth.logOut();
         //Dispose
         this.dispose();
         //Create new LoginGUI
