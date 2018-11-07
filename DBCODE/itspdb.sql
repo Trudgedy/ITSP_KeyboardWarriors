@@ -29,7 +29,7 @@ USE itspdb;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Table structure for table `items`
 --
 
 CREATE TABLE `items` (
@@ -45,7 +45,11 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`item`, `price`, `quantity`, `supplierid`, `itemid`) VALUES
-('Shank', 3, 50, 1, 1);
+('Shank', 3, 31, 1, 1),
+('Double Shank', 25, 60, 1, 2),
+('Triple Shank', 30, 50, 2, 3),
+('Painting', 1000, 2, 3, 4),
+('Table', 3200, 1, 4, 5);
 
 -- --------------------------------------------------------
 
@@ -67,19 +71,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `date`, `quantity`, `amount`, `paid`, `itemid`) VALUES
-(1, '2018-10-01', 0, 3000, 1, 0),
-(2, '2018-10-02', 0, 35100, 0, 0),
-(5, '2018-09-16', 0, 53000, 1, 0),
-(6, '2018-09-20', 0, 6900, 0, 0),
-(7, '2018-10-08', 0, 8600, 0, 0),
-(8, '2018-10-07', 0, 36000, 0, 0),
-(9, '2018-10-15', 0, 560, 0, 0),
-(10, '2018-10-14', 0, 960, 0, 0),
-(11, '2018-09-13', 0, 9600, 0, 0),
-(12, '2018-09-15', 0, 3500, 0, 0),
-(13, '2018-10-17', 0, 6000, 0, 1),
-(14, '2018-10-17', 0, 9630, 0, 1),
-(15, '0000-00-00', 0, 3685, 0, 1);
+(14, '2018-10-17', 50, 9630, 1, 1),
+(15, '2018-11-07', 60, 30, 1, 2),
+(16, '2018-11-07', 5, 3, 0, 1),
+(17, '2018-11-07', 19, 3, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -94,6 +89,13 @@ CREATE TABLE `sales` (
   `quantity` int(11) NOT NULL,
   `itemid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sales`
+--
+
+INSERT INTO `sales` (`saleid`, `dateofsale`, `price`, `quantity`, `itemid`) VALUES
+(1, '2018-10-18', 5000, 50, 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +117,11 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`supplierid`, `name`, `email`, `number`, `address`, `vatstatus`) VALUES
-(1, 'TestBusiness', 'notarealbusiness@gmail.com', '123456789', 'Not a real stress 18', 0);
+(1, 'RealBusiness', 'notarealbusiness@gmail.com', '123456789', 'Not a real street 18', 0),
+(2, 'TotesMagotes', 'sendhelpplease@gmail.com', '123456789', '18 Trashcan street', 0),
+(5, 'Charlies place', 'charlie@place.com', '4586957856', '18 Factory Street', 0),
+(6, 'Andys shop', 'andy@shop.com', '5369455846', '18 Real Street', 0),
+(8, 'Corner Shop', 'corner@shop.com', '2536859865', '20 Real Street', 1);
 
 -- --------------------------------------------------------
 
@@ -135,7 +141,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userid`, `username`, `password`, `salt`) VALUES
-(1, 'Andrew', 'password', 'doublewhammy');
+(1, 'admin', 'admin', 'doublewhammy');
 
 --
 -- Indexes for dumped tables
@@ -182,25 +188,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `itemid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `itemid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `saleid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `saleid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `supplierid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `supplierid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user`

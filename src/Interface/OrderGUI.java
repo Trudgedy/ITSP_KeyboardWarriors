@@ -7,7 +7,10 @@ package Interface;
 
 import Classes.Database;
 import Classes.Item;
+import Classes.Supplier;
+import Classes.UserAuthentication;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -18,27 +21,29 @@ import javax.swing.table.DefaultTableModel;
  */
 public class OrderGUI extends javax.swing.JFrame {
 
+    private UserAuthentication userAuth = new UserAuthentication();
+
     /**
      * Creates new form OrderGUI
      */
     public OrderGUI() {
         initComponents();
         updateTable();
-        
+
         txtfieldQuantity.getDocument().addDocumentListener(new DocumentListener() {
-            
+
             public void changedUpdate(DocumentEvent e) {
                 sliderQuantity.setValue(Integer.parseInt(txtfieldQuantity.getText()));
             }
-            
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 sliderQuantity.setValue(Integer.parseInt(txtfieldQuantity.getText()));
             }
-            
+
             @Override
             public void removeUpdate(DocumentEvent e) {
-               
+
             }
         });
     }
@@ -228,6 +233,11 @@ public class OrderGUI extends javax.swing.JFrame {
         lblTotalPrice.setText("R201");
 
         btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelOptionsLayout = new javax.swing.GroupLayout(panelOptions);
         panelOptions.setLayout(panelOptionsLayout);
@@ -335,8 +345,8 @@ public class OrderGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
-        
+        new HomeGUI(userAuth).setVisible(true);
+
 
     }//GEN-LAST:event_btnHomeActionPerformed
 
@@ -344,11 +354,11 @@ public class OrderGUI extends javax.swing.JFrame {
         //When the table is clicked 
 
         int selectedRow = OrderTable.getSelectedRow();
-        
+
         String name = OrderTable.getModel().getValueAt(selectedRow, 0).toString();
         String supplier = OrderTable.getModel().getValueAt(selectedRow, 2).toString();
         boolean isChecked = (boolean) OrderTable.getModel().getValueAt(selectedRow, 3);
-        
+
         txtfieldItem.setText(name);
         txtfieldSupplier.setText(supplier);
         checkboxAvailable.setSelected(isChecked);
@@ -358,7 +368,7 @@ public class OrderGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         txtfieldQuantity.setText(sliderQuantity.getValue() + "");
     }//GEN-LAST:event_sliderQuantityStateChanged
-    
+
 
     private void txtfieldQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfieldQuantityActionPerformed
         // TODO add your handling code here:
@@ -372,23 +382,44 @@ public class OrderGUI extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         //search
-        
-                //checkboxAvailable
-        if (txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+
+        //checkboxAvailable
+        if (txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")) {
             //Refresh Table
             updateTable();
-        } else if(!txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")){
+        } else if (!txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")) {
             //Gets by name
-            
-        }else if(txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")){
+
+        } else if (txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")) {
             //Get by supplier
-            
-        }else{
-           //Get by Supplier and Item 
-           
+
+        } else {
+            //Get by Supplier and Item 
+
         }
-        
+
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        Database db = new Database();
+        int selectedIndex = OrderTable.getSelectedRow();
+
+        String name = OrderTable.getValueAt(selectedIndex, 0).toString();
+        int price = Integer.parseInt(OrderTable.getValueAt(selectedIndex, 1).toString());
+        String isAvailable = OrderTable.getValueAt(selectedIndex, 3).toString();
+        int quantity = Integer.parseInt(txtfieldQuantity.getText());
+        int itemId = db.getItemsByName(name).get(0).getItemid();
+
+        if (isAvailable.equalsIgnoreCase("true")) {
+            db.insertOrder(itemId, price, quantity);
+            db.updateOrderQuantity(itemId, quantity);
+            JOptionPane.showMessageDialog(null, "Order Complete");
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Item not available");
+        }
+
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,20 +482,20 @@ public class OrderGUI extends javax.swing.JFrame {
 
     private void updateTable() {
         Database db = new Database();
-        
+
         ArrayList<Item> itemArr = new ArrayList<>();
         itemArr = db.getItems();
-        
+
         DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
         model.setRowCount(0);
-            
+
         for (int i = 0; i < itemArr.size(); i++) {
- 
+
             boolean available = true;
             if (itemArr.get(i).getQuantity() == 0) {
                 available = false;
             }
-            
+
             Object[] row = {itemArr.get(i).getItemName(), itemArr.get(i).getPrice(), itemArr.get(i).getSupplierName(), available};
             model.addRow(row);
         }

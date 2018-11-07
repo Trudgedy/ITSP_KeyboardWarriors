@@ -18,6 +18,7 @@ public class UserAuthentication {
 
         //Encrypt password here
         if (passwordDetails[0].equals(password)) {
+            LoggedInUser = username;
             System.out.println("Logged in");
             return true;
         }
@@ -32,6 +33,10 @@ public class UserAuthentication {
         }
 
         return false;
+    }
+
+    public void logout() {
+        LoggedInUser = "";
     }
 
 }

@@ -7,9 +7,8 @@ package Interface;
 
 import Classes.Database;
 import Classes.Order;
-import java.awt.event.WindowEvent;
+import Classes.UserAuthentication;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -18,13 +17,14 @@ import javax.swing.table.DefaultTableModel;
  * @author Tiltasaurus
  */
 public class ViewInvoicesGUI extends javax.swing.JFrame {
-
+private UserAuthentication userAuth = new UserAuthentication();
     /**
      * Creates new form ViewInvoicesGUI
      */
     public ViewInvoicesGUI() {
         initComponents();
         updateDatabase();
+        this.setLocationRelativeTo(null);
             
         }
     
@@ -52,10 +52,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
 
         tblInvoices.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Invoice Number", "Business", "Total Price", "Date"
@@ -165,7 +162,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
         //Dispose Current Interface
         this.dispose();
         //Create new HomeGUI
-        new HomeGUI().setVisible(true);
+        new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -218,7 +215,7 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
         Database db = new Database();
         
         ArrayList<Order> orderArr = new ArrayList<>();
-        orderArr = db.getPaidOrder();
+        orderArr = db.getPaidOrders(1);
         
         for (int i = 0; i < orderArr.size(); i++) {
             DefaultTableModel model = (DefaultTableModel) tblInvoices.getModel();
@@ -230,7 +227,8 @@ public class ViewInvoicesGUI extends javax.swing.JFrame {
             
             Object[] row = {orderArr.get(i).getOrderid(),
                     orderArr.get(i).getBusinessname(), 
-                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+                    orderArr.get(i).getAmount(), 
+                    orderArr.get(i).getDate()};
             model.addRow(row);
         } 
     }
