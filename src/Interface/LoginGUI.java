@@ -114,8 +114,8 @@ public class LoginGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-
-        if (userAuth.Login(UsernameTxt.getText(), PasswordTxt.getText())) {
+                
+        if (userAuth.Login(UsernameTxt.getText(), String.valueOf(PasswordTxt.getPassword()))) {
             HomeGUI home = new HomeGUI(userAuth);
             home.setVisible(true);
             this.setVisible(false);
