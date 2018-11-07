@@ -47,6 +47,50 @@ public class ReportsGUI extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
+    
+    private int getIncome(DefaultTableModel incomeModel){
+        int incomeAmount = 0;
+        
+        //iterate through the list of sales
+        for (int i = 0; i < income.size(); i++) {
+                incomeAmount = incomeAmount + income.get(i).getPrice();
+
+                //add data to row
+                Object[] incomeRow = {
+                    income.get(i).getDateofsale(),
+                    income.get(i).getPrice(),
+                    income.get(i).getQuantity(),
+                    income.get(i).getItemName()
+                };
+
+                //add row to table
+                incomeModel.addRow(incomeRow);
+        }
+        
+        return incomeAmount;
+    }
+    
+    private int getExpenses(DefaultTableModel expensesModel){
+        int expensesAmount = 0;
+        
+        //iterate through the list of orders
+        for (int i = 0; i < expenses.size(); i++) {
+            expensesAmount = expensesAmount + expenses.get(i).getAmount();
+
+            //add data to row
+            Object[] incomeRow = {
+                expenses.get(i).getOrderid(),
+                expenses.get(i).getBusinessname(),
+                expenses.get(i).getAmount(),
+                expenses.get(i).getDate()
+            };
+
+            //add row to table
+            expensesModel.addRow(incomeRow);
+        }
+        
+        return expensesAmount;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -234,9 +278,9 @@ public class ReportsGUI extends javax.swing.JFrame {
         String period = periodComboBox.getSelectedItem().toString();
         income = null;
         expenses = null;
-        int incomeAmount = 0;
-        int expensesAmount = 0;
-        int profit = 0;
+        int incomeAmount;
+        int expensesAmount;
+        int profit;
 
         Database generate = new Database();
 
@@ -262,49 +306,19 @@ public class ReportsGUI extends javax.swing.JFrame {
         incomeModel.setColumnIdentifiers(incomeHeader);
         incomeTable.setModel(incomeModel);
 
-        //iterate through the list of sales
-        for (int i = 0; i < income.size(); i++) {
-            incomeAmount = incomeAmount + income.get(i).getPrice();
-
-            //add data to row
-            Object[] incomeRow = {
-                income.get(i).getDateofsale(),
-                income.get(i).getPrice(),
-                income.get(i).getQuantity(),
-                income.get(i).getItemName()
-            };
-
-            //add row to table
-            incomeModel.addRow(incomeRow);
-        }
-
         //create a new model for the table and set headings
         DefaultTableModel expensesModel = new DefaultTableModel(0, 0);
         String expensesHeader[] = new String[]{"Order ID", "Business Name", "Amount", "Date"};
         expensesModel.setColumnIdentifiers(expensesHeader);
         expensesTable.setModel(expensesModel);
-
-        //iterate through the list of orders
-        for (int i = 0; i < expenses.size(); i++) {
-            expensesAmount = expensesAmount + expenses.get(i).getAmount();
-
-            //add data to row
-            Object[] incomeRow = {
-                expenses.get(i).getOrderid(),
-                expenses.get(i).getBusinessname(),
-                expenses.get(i).getAmount(),
-                expenses.get(i).getDate()
-            };
-
-            //add row to table
-            expensesModel.addRow(incomeRow);
-        }
-
-        profit = incomeAmount - expensesAmount;
-
+        
         if (reportType.equals("Profit")) {
+            incomeAmount = getIncome(incomeModel);
+            expensesAmount = getExpenses(expensesModel);
+            profit = incomeAmount - expensesAmount;
             totalLabelText = "Total profit is: R " + profit;
         } else {
+            incomeAmount = getIncome(incomeModel);
             totalLabelText = "Total turnover is: R " + incomeAmount;
         }
 
