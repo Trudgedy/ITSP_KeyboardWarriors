@@ -236,7 +236,7 @@ public class ReportsGUI extends javax.swing.JFrame {
         expenses = null;
         int incomeAmount = 0;
         int expensesAmount = 0;
-        int turnover = 0;
+        int profit = 0;
 
         Database generate = new Database();
 
@@ -300,12 +300,12 @@ public class ReportsGUI extends javax.swing.JFrame {
             expensesModel.addRow(incomeRow);
         }
 
-        turnover = incomeAmount - expensesAmount;
+        profit = incomeAmount - expensesAmount;
 
         if (reportType.equals("Profit")) {
-            totalLabelText = "Total profit is: R " + incomeAmount;
+            totalLabelText = "Total profit is: R " + profit;
         } else {
-            totalLabelText = "Total turnover is: R " + turnover;
+            totalLabelText = "Total turnover is: R " + incomeAmount;
         }
 
         totalLabel.setText(totalLabelText);
