@@ -117,8 +117,8 @@ public class LoginGUI extends javax.swing.JFrame {
                 
         if (userAuth.Login(UsernameTxt.getText(), String.valueOf(PasswordTxt.getPassword()))) {
             HomeGUI home = new HomeGUI(userAuth);
-            home.setVisible(true);
             this.setVisible(false);
+            home.setVisible(true);
             this.dispose();
         } else {
 

@@ -257,7 +257,7 @@ public class Database {
         ArrayList<Item> Arr = new ArrayList<>();
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE suppliers.name = " + supplier + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE suppliers.name = '" + supplier + "'");
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -284,7 +284,7 @@ public class Database {
         ArrayList<Item> Arr = new ArrayList<>();
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = " + name + " AND suppliers.name = " + supplier + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = '" + name + "' AND suppliers.name = '" + supplier + "'");
             rs = pst.executeQuery();
 
             while (rs.next()) {

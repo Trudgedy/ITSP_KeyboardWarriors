@@ -387,15 +387,62 @@ public class OrderGUI extends javax.swing.JFrame {
         if (txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")) {
             //Refresh Table
             updateTable();
+
         } else if (!txtfieldItem.getText().equals("") && txtfieldSupplier.getText().equals("")) {
             //Gets by name
+            DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+            model.setRowCount(0);
+            
+            Database db = new Database();
+ArrayList<Item> items = db.getItemsByName(txtfieldItem.getText());
+            
+            for (int i = 0; i < items.size(); i++) {
 
+                boolean available = true;
+                if (items.get(i).getQuantity() == 0) {
+                    available = false;
+                }
+
+                Object[] row = {items.get(i).getItemName(), items.get(i).getPrice(), items.get(i).getSupplierName(), available};
+                model.addRow(row);
+            }
         } else if (txtfieldItem.getText().equals("") && !txtfieldSupplier.getText().equals("")) {
             //Get by supplier
+DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+            model.setRowCount(0);
+            
+            Database db = new Database();
+ArrayList<Item> items = db.getItemsBySupplier(txtfieldSupplier.getText());
+            
+            for (int i = 0; i < items.size(); i++) {
 
+                boolean available = true;
+                if (items.get(i).getQuantity() == 0) {
+                    available = false;
+                }
+
+                Object[] row = {items.get(i).getItemName(), items.get(i).getPrice(), items.get(i).getSupplierName(), available};
+                model.addRow(row);
+            }
         } else {
             //Get by Supplier and Item 
 
+DefaultTableModel model = (DefaultTableModel) OrderTable.getModel();
+            model.setRowCount(0);
+            
+            Database db = new Database();
+ArrayList<Item> items = db.getItemsByNameAndSupplier(txtfieldItem.getText(), txtfieldSupplier.getText());
+            
+            for (int i = 0; i < items.size(); i++) {
+
+                boolean available = true;
+                if (items.get(i).getQuantity() == 0) {
+                    available = false;
+                }
+
+                Object[] row = {items.get(i).getItemName(), items.get(i).getPrice(), items.get(i).getSupplierName(), available};
+                model.addRow(row);
+            }
         }
 
     }//GEN-LAST:event_btnSearchActionPerformed
