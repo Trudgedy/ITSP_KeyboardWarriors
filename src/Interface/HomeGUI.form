@@ -106,7 +106,7 @@
               <Font name="Arial Black" size="48" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Company Name"/>
+            <Property name="text" type="java.lang.String" value="Bware"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -127,16 +127,16 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="btnViewInvoices" min="-2" pref="196" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="btnClients" min="-2" pref="196" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnViewSuppliers" alignment="1" min="-2" pref="196" max="-2" attributes="0"/>
-                              <Component id="btnClients" alignment="1" min="-2" pref="196" max="-2" attributes="0"/>
+                              <Component id="btnViewInvoices" min="-2" pref="196" max="-2" attributes="0"/>
+                              <Component id="btnViewSuppliers" alignment="0" min="-2" pref="196" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -147,9 +147,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnClients" min="-2" pref="43" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                  <Component id="btnViewSuppliers" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="btnViewSuppliers" min="-2" pref="43" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnViewInvoices" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -162,7 +162,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="View unpaid orders"/>
+            <Property name="text" type="java.lang.String" value="View Unpaid Orders"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClientsActionPerformed"/>
@@ -275,7 +275,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="lblCurrentDate" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="114" max="32767" attributes="0"/>
+                          <EmptySpace pref="115" max="32767" attributes="0"/>
                           <Component id="btnLogout" min="-2" pref="196" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -307,7 +307,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Employee_Name"/>
+            <Property name="text" type="java.lang.String" value="Admin"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblCurrentDate">
@@ -315,7 +315,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="16 December 2018"/>
+            <Property name="text" type="java.lang.String" value="08 November 2018"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnLogout">

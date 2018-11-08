@@ -68,7 +68,7 @@ public class HomeGUI extends javax.swing.JFrame {
 
         lblCompanyName.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         lblCompanyName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCompanyName.setText("Company Name");
+        lblCompanyName.setText("Bware");
 
         javax.swing.GroupLayout panelHeaderLayout = new javax.swing.GroupLayout(panelHeader);
         panelHeader.setLayout(panelHeaderLayout);
@@ -91,7 +91,7 @@ public class HomeGUI extends javax.swing.JFrame {
         panelView.setName(""); // NOI18N
 
         btnClients.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnClients.setText("View unpaid orders");
+        btnClients.setText("View Unpaid Orders");
         btnClients.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientsActionPerformed(evt);
@@ -126,23 +126,23 @@ public class HomeGUI extends javax.swing.JFrame {
             .addGroup(panelViewLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelViewLayout.createSequentialGroup()
-                        .addComponent(btnViewInvoices, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelViewLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnClients, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelViewLayout.createSequentialGroup()
                         .addGroup(panelViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnViewSuppliers, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClients, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(btnViewInvoices, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnViewSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelViewLayout.setVerticalGroup(
             panelViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelViewLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnClients, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(btnViewSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnViewSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnViewInvoices, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -189,10 +189,10 @@ public class HomeGUI extends javax.swing.JFrame {
         panelInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Session Details"));
 
         lblCurrentEmployee.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblCurrentEmployee.setText("Employee_Name");
+        lblCurrentEmployee.setText("Admin");
 
         lblCurrentDate.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblCurrentDate.setText("16 December 2018");
+        lblCurrentDate.setText("08 November 2018");
 
         btnLogout.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnLogout.setText("Logout");
@@ -219,7 +219,7 @@ public class HomeGUI extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(lblCurrentDate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                         .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );

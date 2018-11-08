@@ -56,7 +56,7 @@ public class ViewOrdersGUI extends javax.swing.JFrame {
 
         lblCompanyName.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         lblCompanyName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCompanyName.setText("Company Name");
+        lblCompanyName.setText("Bware");
 
         javax.swing.GroupLayout panelHeaderLayout = new javax.swing.GroupLayout(panelHeader);
         panelHeader.setLayout(panelHeaderLayout);
@@ -212,7 +212,6 @@ public class ViewOrdersGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelClients.getAccessibleContext().setAccessibleName("Unpaid Orders");
         panelClients.getAccessibleContext().setAccessibleDescription("");
 
         pack();
