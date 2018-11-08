@@ -5,21 +5,30 @@
  */
 package Interface;
 
+import Classes.Database;
+import Classes.Order;
 import Classes.UserAuthentication;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Heli
  */
 public class ViewOrdersGUI extends javax.swing.JFrame {
-private UserAuthentication userAuth = new UserAuthentication();
+
+    private UserAuthentication userAuth = new UserAuthentication();
+    Database db = new Database();
+
     /**
      * Creates new form ViewData
      */
     public ViewOrdersGUI() {
-        
+
         initComponents();
+        updateTable();
+
     }
 
     /**
@@ -92,20 +101,44 @@ private UserAuthentication userAuth = new UserAuthentication();
                 .addContainerGap())
         );
 
-        panelClients.setBorder(javax.swing.BorderFactory.createTitledBorder("Unpayed Orders"));
+        panelClients.setBorder(javax.swing.BorderFactory.createTitledBorder("Unpaid Orders"));
 
         tblOrders.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Business Name", "Order date", "Price", "Item", "Quantity"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblOrders.setName(""); // NOI18N
+        tblOrders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrdersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblOrders);
+        if (tblOrders.getColumnModel().getColumnCount() > 0) {
+            tblOrders.getColumnModel().getColumn(0).setResizable(false);
+            tblOrders.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tblOrders.getColumnModel().getColumn(2).setResizable(false);
+            tblOrders.getColumnModel().getColumn(2).setPreferredWidth(15);
+            tblOrders.getColumnModel().getColumn(3).setResizable(false);
+            tblOrders.getColumnModel().getColumn(3).setPreferredWidth(15);
+            tblOrders.getColumnModel().getColumn(4).setResizable(false);
+            tblOrders.getColumnModel().getColumn(5).setResizable(false);
+            tblOrders.getColumnModel().getColumn(5).setPreferredWidth(10);
+        }
+        tblOrders.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout panelClientsLayout = new javax.swing.GroupLayout(panelClients);
         panelClients.setLayout(panelClientsLayout);
@@ -127,6 +160,11 @@ private UserAuthentication userAuth = new UserAuthentication();
         panelPayment.setBorder(javax.swing.BorderFactory.createTitledBorder("Make Payment"));
 
         btnMakePayment.setText("Make Payment");
+        btnMakePayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMakePaymentActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPaymentLayout = new javax.swing.GroupLayout(panelPayment);
         panelPayment.setLayout(panelPaymentLayout);
@@ -174,6 +212,9 @@ private UserAuthentication userAuth = new UserAuthentication();
                 .addContainerGap())
         );
 
+        panelClients.getAccessibleContext().setAccessibleName("Unpaid Orders");
+        panelClients.getAccessibleContext().setAccessibleDescription("");
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -184,6 +225,26 @@ private UserAuthentication userAuth = new UserAuthentication();
         //Create new HomeGUI
         new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
+    int orderID;
+    private void btnMakePaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMakePaymentActionPerformed
+        if (orderID == 0) {
+
+            JOptionPane.showMessageDialog(null, "Please ensure order was selected.");
+
+        } else {
+            db.updateOrder(orderID);
+            updateTable();
+            JOptionPane.showMessageDialog(null, "Order successfully updated.");
+
+        }
+    }//GEN-LAST:event_btnMakePaymentActionPerformed
+
+    private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
+        //When the table is clicked 
+        int selectedRow = tblOrders.getSelectedRow();
+        orderID = Integer.parseInt(tblOrders.getModel().getValueAt(selectedRow, 0).toString());
+
+    }//GEN-LAST:event_tblOrdersMouseClicked
 
     /**
      * @param args the command line arguments
@@ -219,8 +280,6 @@ private UserAuthentication userAuth = new UserAuthentication();
         //</editor-fold>
         //</editor-fold>
 
-        
-        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ViewOrdersGUI().setVisible(true);
@@ -239,4 +298,23 @@ private UserAuthentication userAuth = new UserAuthentication();
     private javax.swing.JPanel panelPayment;
     private javax.swing.JTable tblOrders;
     // End of variables declaration//GEN-END:variables
+
+    private void updateTable() {
+
+        ArrayList<Order> orderArr = new ArrayList<>();
+        orderArr = db.getUnpaidOrders();
+        DefaultTableModel model = (DefaultTableModel) tblOrders.getModel();
+        model.setRowCount(0);
+        for (int i = 0; i < orderArr.size(); i++) {
+
+            Object[] row = {orderArr.get(i).getOrderid(),
+                orderArr.get(i).getBusinessname(),
+                orderArr.get(i).getDate(),
+                orderArr.get(i).getAmount(),
+                orderArr.get(i).getItem(),
+                orderArr.get(i).getQuantity()};
+            model.addRow(row);
+        }
+    }
+
 }

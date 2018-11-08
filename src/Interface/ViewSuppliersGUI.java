@@ -6,14 +6,12 @@
 package Interface;
 
 import Classes.Database;
-import Classes.Order;
+import Classes.Supplier;
 import Classes.UserAuthentication;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-import javax.swing.JTable;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 //import net.proteanit.sql.DbUtils;
 
@@ -22,14 +20,18 @@ import javax.swing.table.DefaultTableModel;
  * @author Heli
  */
 public class ViewSuppliersGUI extends javax.swing.JFrame {
-private UserAuthentication userAuth = new UserAuthentication();
+
+    private UserAuthentication userAuth = new UserAuthentication();
+
     /**
      * Creates new form ViewBusinesses
      */
+    String supplierName;
+    Database db = new Database();
+
     public ViewSuppliersGUI() {
-        displayTableRec(tblSuppliers);
         initComponents();
-    //    updateTable();
+        updateTable();
     }
 
     /**
@@ -58,10 +60,25 @@ private UserAuthentication userAuth = new UserAuthentication();
         panelOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
 
         btnAddSupplier.setText("Add Supplier");
+        btnAddSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSupplierActionPerformed(evt);
+            }
+        });
 
         btnEditSupplier.setText("Edit Supplier");
+        btnEditSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditSupplierActionPerformed(evt);
+            }
+        });
 
         btnDeleteSupplier.setText("Delete Supplier");
+        btnDeleteSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSupplierActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelOptionsLayout = new javax.swing.GroupLayout(panelOptions);
         panelOptions.setLayout(panelOptionsLayout);
@@ -91,16 +108,34 @@ private UserAuthentication userAuth = new UserAuthentication();
 
         tblSuppliers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Business Name", "Email", "Tel", "Adress", "Quakified for VAT"
+                "Business Name", "Email", "Phone Number", "Address", "Qualified for VAT"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblSuppliers.setName(""); // NOI18N
+        tblSuppliers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSuppliersMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblSuppliers);
+        if (tblSuppliers.getColumnModel().getColumnCount() > 0) {
+            tblSuppliers.getColumnModel().getColumn(0).setResizable(false);
+            tblSuppliers.getColumnModel().getColumn(1).setResizable(false);
+            tblSuppliers.getColumnModel().getColumn(2).setResizable(false);
+            tblSuppliers.getColumnModel().getColumn(3).setResizable(false);
+            tblSuppliers.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         javax.swing.GroupLayout panelSuppliersLayout = new javax.swing.GroupLayout(panelSuppliers);
         panelSuppliers.setLayout(panelSuppliersLayout);
@@ -209,32 +244,119 @@ private UserAuthentication userAuth = new UserAuthentication();
         new HomeGUI(userAuth).setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
+    private void btnDeleteSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSupplierActionPerformed
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + supplierName + " from the supplier list ? ");
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            db.deleteSupplier(supplierName);
+            updateTable();
+        }
+
+
+    }//GEN-LAST:event_btnDeleteSupplierActionPerformed
+
+    private void tblSuppliersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSuppliersMouseClicked
+        int selectedRow = tblSuppliers.getSelectedRow();
+        supplierName = (tblSuppliers.getModel().getValueAt(selectedRow, 0).toString());
+    }//GEN-LAST:event_tblSuppliersMouseClicked
+
+    private void btnEditSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSupplierActionPerformed
+
+        Supplier supplier = db.getSupplierByName(supplierName);
+        JTextField supplierNameField = new JTextField();
+        JTextField emailField = new JTextField();
+        JTextField numberField = new JTextField();
+        JTextField addressField = new JTextField();
+        JRadioButton vatStatus = new JRadioButton();
+        Object[] message = {
+            "New Supplier name : ", supplierNameField,
+            "New email : ", emailField,
+            "new number : ", numberField,
+            "New address : ", addressField,
+            "New vat status : ", vatStatus,};
+        supplierNameField.setText(supplier.getName());
+        emailField.setText(supplier.getEmail());
+        numberField.setText(supplier.getNumber());
+        addressField.setText(supplier.getAddress());
+        vatStatus.setSelected(supplier.isVatstatus());
+
+        int option = JOptionPane.showConfirmDialog(null, message, "Enter new values", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String supplierName = supplierNameField.getText();
+            String email = emailField.getText();
+            String number = numberField.getText();
+            String address = addressField.getText();
+            boolean newVatStatus = vatStatus.isSelected();
+            supplier.setName(supplierName);
+            supplier.setEmail(email);
+            supplier.setNumber(number);
+            supplier.setAddress(address);
+            supplier.setVatstatus(newVatStatus);
+            db.updateSupplier(supplier);
+            updateTable();
+        }
+
+
+    }//GEN-LAST:event_btnEditSupplierActionPerformed
+
+    private void btnAddSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSupplierActionPerformed
+
+        String name = JOptionPane.showInputDialog("Please enter name of supplier. ");
+
+        if (db.ifSupplierExists(name) == false) {
+
+            Supplier supplier = new Supplier();
+            JTextField supplierNameField = new JTextField();
+            JTextField emailField = new JTextField();
+            JTextField numberField = new JTextField();
+            JTextField addressField = new JTextField();
+            JRadioButton vatStatus = new JRadioButton();
+            Object[] message = {
+                "Supplier name : ", supplierNameField,
+                "Email : ", emailField,
+                "Number : ", numberField,
+                "Address : ", addressField,
+                "Vat status : ", vatStatus,};
+            supplierNameField.setText(name);
+
+            int option = JOptionPane.showConfirmDialog(null, message, "Enter values for new supplier: ", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                String supplierName = supplierNameField.getText();
+                String email = emailField.getText();
+                String number = numberField.getText();
+                String address = addressField.getText();
+                boolean newVatStatus = vatStatus.isSelected();
+
+                supplier.setName(supplierName);
+                supplier.setEmail(email);
+                supplier.setNumber(number);
+                supplier.setAddress(address);
+                supplier.setVatstatus(newVatStatus);
+                db.insertSupplier(supplier);
+                updateTable();
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Supplier already exists. Please try again.");
+        }
+
+
+    }//GEN-LAST:event_btnAddSupplierActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
 
-        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ViewSuppliersGUI().setVisible(true);
             }
         });
     }
-    
-    public void displayTableRec(JTable tab){
-    try{
-//        Connection conn = DriverManager.getConnection("ITSPdb.accdb", "root", "");
-//        Statement st = conn.createStatement();
-//        String query = "SELECT * FROM Businesses;";
-//        ResultSet rs = st.executeQuery(query);
-//        tab.setModel(DbUtils.resultSetToTableModel(rs));
-        
-        
-    }catch(Exception e){
-        System.out.println(e);
-    }
-    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSupplier;
@@ -249,25 +371,22 @@ private UserAuthentication userAuth = new UserAuthentication();
     private javax.swing.JPanel panelSuppliers;
     private javax.swing.JTable tblSuppliers;
     // End of variables declaration//GEN-END:variables
-    /*
+
     private void updateTable() {
-        Database db = new Database();
-        
-        ArrayList<Order> orderArr = new ArrayList<>();
-        orderArr = db.getPaidOrder();
-        
+
+        ArrayList<Supplier> orderArr = new ArrayList<>();
+        orderArr = db.viewSupplier();
+
+        DefaultTableModel model = (DefaultTableModel) tblSuppliers.getModel();
+        model.setRowCount(0);
         for (int i = 0; i < orderArr.size(); i++) {
-            DefaultTableModel model = (DefaultTableModel) tblSuppliers.getModel();
-            
-            boolean available = true;
-            if (orderArr.get(i).getQuantity() == 0){
-                available = false;
-            }
-            
-            Object[] row = {orderArr.get(i).getOrderid(),
-                    orderArr.get(i).getBusinessname(), 
-                    orderArr.get(i).getAmount(), orderArr.get(i).getDate()};
+
+            Object[] row = {orderArr.get(i).getName(),
+                orderArr.get(i).getEmail(),
+                orderArr.get(i).getNumber(),
+                orderArr.get(i).getAddress(),
+                orderArr.get(i).isVatstatus()};
             model.addRow(row);
         }
-    }*/
+    }
 }

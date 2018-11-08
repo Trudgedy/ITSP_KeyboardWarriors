@@ -30,7 +30,6 @@ public class Database {
 
         try {
             connect_db();
-            System.out.println(username);
             PreparedStatement pst = conn.prepareStatement("SELECT password,salt FROM `user` WHERE username=?");
             pst.setString(1, username);
             rs = pst.executeQuery();
@@ -85,11 +84,18 @@ public class Database {
 
     //To format date. SELECT DATE_FORMAT(date,"%Y/%m/%e") FROM orders;
     // For invoices. Will implement later.
-    public static ArrayList<Order> getPaidOrders() {
+    public static ArrayList<Order> getPaidOrders(int x) {
         ArrayList<Order> Arr = new ArrayList<>();
+        String range;
+
+        if (x == 1) {
+            range = "1 YEAR";
+        } else {
+            range = "1 MONTH";
+        }
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT order_id, suppliers.name, amount, date FROM `orders` JOIN items ON orders.itemid = items.itemid JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE paid = 1");
+            PreparedStatement pst = conn.prepareStatement("SELECT order_id, suppliers.name, amount, date FROM `orders` JOIN items ON orders.itemid = items.itemid JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE paid = 1 AND date >= DATE(NOW()) - INTERVAL " + range + "");
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -224,7 +230,7 @@ public class Database {
         ArrayList<Item> Arr = new ArrayList<>();
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = " + Name + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT itemid,item,price,quantity,suppliers.name FROM `items` INNER JOIN suppliers ON items.supplierid = suppliers.supplierid WHERE item = '" + Name + "'");
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -300,15 +306,15 @@ public class Database {
     }
 
     // Inserts new order.
-    public static boolean insertOrder(int itemid, int price, int quantity) {
+    public static boolean insertOrder(int itemId, int price, int quantity) {
         try {
 
             Calendar calendar = Calendar.getInstance();
             java.sql.Date date = new java.sql.Date(calendar.getTime().getTime());
 
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date,quantity) VALUES (?, ?, ?, ?)");
-            pst.setInt(1, itemid);
+            PreparedStatement pst = conn.prepareStatement("INSERT INTO orders (itemid,amount,date,quantity,paid) VALUES (?, ?, ?, ?, 0)");
+            pst.setInt(1, itemId);
             pst.setInt(2, price);
             pst.setDate(3, date, calendar);
             pst.setInt(4, quantity);
@@ -351,17 +357,62 @@ public class Database {
 
     }
 
+    public static Supplier getSupplierByName(String name) {
+
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers` WHERE name = '" + name + "'");
+
+            rs = pst.executeQuery();
+            Supplier supplier = new Supplier();
+
+            while (rs.next()) {
+
+                supplier.setName(rs.getString(1));
+                supplier.setEmail(rs.getString(2));
+                supplier.setNumber(rs.getString(3));
+                supplier.setAddress(rs.getString(4));
+                supplier.setVatstatus(rs.getBoolean(5));
+
+            }
+            return supplier;
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return null;
+        }
+
+    }
+
+    public static boolean ifSupplierExists(String name) {
+
+        try {
+
+            connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT name, email, number, address, vatstatus FROM `suppliers` WHERE name = '" + name + "'");
+            rs = pst.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
     // Inserts new supplier. Send through supplier object.
     public static boolean insertSupplier(Supplier supplier) {
         try {
             connect_db();
 
-            PreparedStatement pst = conn.prepareStatement("SELECT * FROM suppliers WHERE name = " + supplier.getName() + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT * FROM suppliers WHERE name = '" + supplier.getName() + "'");
             rs = pst.executeQuery();
 
             if (!rs.next()) {
 
-                pst = conn.prepareStatement("INSERT INTO suppliers (name,email,number,address,varstatus) VALUES (?, ?, ?, ?, ?)");
+                pst = conn.prepareStatement("INSERT INTO suppliers (name,email,number,address,vatstatus) VALUES (?, ?, ?, ?, ?)");
                 pst.setString(1, supplier.getName());
                 pst.setString(2, supplier.getEmail());
                 pst.setString(3, supplier.getNumber());
@@ -387,13 +438,13 @@ public class Database {
     public static boolean deleteSupplier(String name) {
         try {
             connect_db();
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = '" + name + "'");
 
-            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + name + "");
             rs = pst.executeQuery();
 
             if (rs.next()) {
 
-                pst = conn.prepareStatement("DELETE FROM suppliers WHERE supplierid  = " + rs.getString(1) + "");
+                pst = conn.prepareStatement("DELETE FROM suppliers WHERE supplierid  = " + rs.getInt(1) + "");
                 pst.executeUpdate();
                 return true;
 
@@ -414,7 +465,7 @@ public class Database {
     public static boolean updateSupplier(Supplier supplier) {
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = " + supplier.getName() + "");
+            PreparedStatement pst = conn.prepareStatement("SELECT supplierid FROM suppliers WHERE name = '" + supplier.getName() + "'");
             rs = pst.executeQuery();
 
             if (rs.next()) {
@@ -445,8 +496,32 @@ public class Database {
 
         try {
             connect_db();
-            PreparedStatement pst = conn.prepareStatement("UPDATE orders SET paid = (1) WHERE order_id = " + orderid + "");
-            pst.setInt(1, orderid);
+            PreparedStatement pst = conn.prepareStatement("UPDATE orders SET paid = (?) WHERE order_id = " + orderid + "");
+            pst.setInt(1, 1);
+            pst.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+
+            System.out.println("Caught exception: " + e);
+            return false;
+        }
+
+    }
+
+    public static boolean updateOrderQuantity(int itemid, int quantity) {
+
+        try {
+            connect_db();
+            PreparedStatement selectpst = conn.prepareStatement("SELECT quantity FROM items WHERE itemid = " + itemid + "");
+            rs = selectpst.executeQuery();
+            int totalquantity = quantity;
+            if (rs.next()) {
+                totalquantity = rs.getInt("quantity") - quantity;
+            }
+
+            PreparedStatement pst = conn.prepareStatement("UPDATE items SET quantity = (?) WHERE itemid = " + itemid + "");
+            pst.setInt(1, totalquantity);
             pst.executeUpdate();
             return true;
 
@@ -461,9 +536,8 @@ public class Database {
     static void connect_db() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:8080/itspdb", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/itspdb", "root", "");
             statement = conn.createStatement();
-            System.out.println("Database connection successful.");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.print("Could not connect connect to the database. - Error:" + e);
         }
