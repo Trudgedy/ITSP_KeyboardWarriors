@@ -28,7 +28,6 @@ public class HomeGUI extends javax.swing.JFrame {
 
         if (!userAuth.isLoggedIn()) {
             this.dispose();
-
             new LoginGUI(userAuth).setVisible(true);
         }
 
